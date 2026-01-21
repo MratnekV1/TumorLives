@@ -1,6 +1,5 @@
-[gd_scene load_steps=9 format=4 uid="uid://bx4mxpppmwhsw"]
+[gd_scene load_steps=8 format=4 uid="uid://bx4mxpppmwhsw"]
 
-[ext_resource type="Script" uid="uid://72shja1rysv2" path="res://Scripts/Room.gd" id="1_mbwyf"]
 [ext_resource type="Texture2D" uid="uid://btx5p7rl6gpax" path="res://icon.svg" id="1_ooio3"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_mbwyf"]
 
@@ -3928,7 +3927,6 @@ sources/0 = SubResource("TileSetAtlasSource_5aa4i")
 size = Vector2(160, 148)
 
 [node name="TestRoom1" type="Node2D"]
-script = ExtResource("1_mbwyf")
 
 [node name="Ground" type="TileMapLayer" parent="."]
 z_index = -99

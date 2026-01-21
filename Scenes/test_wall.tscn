@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://cmppffqmp0ogc"]
+[gd_scene load_steps=5 format=3 uid="uid://cmppffqmp0ogc"]
 
-[ext_resource type="Script" uid="uid://72shja1rysv2" path="res://Scripts/Room.gd" id="1_jq4yl"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_pvata"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
@@ -3857,7 +3856,6 @@ sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 size = Vector2(16, 32)
 
 [node name="TestWall" type="Node2D"]
-script = ExtResource("1_jq4yl")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 modulate = Color(1, 0, 1, 1)

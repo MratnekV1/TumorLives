@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=4 uid="uid://d2r02w6bgyplt"]
+[gd_scene load_steps=5 format=4 uid="uid://d2r02w6bgyplt"]
 
-[ext_resource type="Script" uid="uid://72shja1rysv2" path="res://Scripts/Room.gd" id="1_3xsmu"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_3o64c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
@@ -3857,7 +3856,6 @@ sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 size = Vector2(16, 32)
 
 [node name="TestCorridor1" type="Node2D"]
-script = ExtResource("1_3xsmu")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -99
