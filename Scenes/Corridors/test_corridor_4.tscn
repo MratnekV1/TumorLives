@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=4 uid="uid://tkn5hb5h5kn4"]
+[gd_scene load_steps=6 format=4 uid="uid://tkn5hb5h5kn4"]
 
-[ext_resource type="Script" uid="uid://72shja1rysv2" path="res://Scripts/Room.gd" id="1_6kgg8"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_2vsg7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
@@ -3854,13 +3853,12 @@ texture = ExtResource("2_2vsg7")
 sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pwo7m"]
-size = Vector2(128, 32)
+size = Vector2(128, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r3vy3"]
-size = Vector2(32, 144)
+size = Vector2(48, 176)
 
 [node name="TestCorridor4" type="Node2D"]
-script = ExtResource("1_6kgg8")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -99
@@ -3894,9 +3892,9 @@ rotation = 4.712389
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(32, -32)
+position = Vector2(32, -40)
 shape = SubResource("RectangleShape2D_pwo7m")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(80, -88)
+position = Vector2(88, -88)
 shape = SubResource("RectangleShape2D_r3vy3")
