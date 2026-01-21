@@ -5,12 +5,9 @@ var max_range := 1200.0
 var speed := 750.0
 var _travelled_distance = 0.0
 
-@onready var particles: GPUParticles2D = $GPUParticles2D
-
 func spawn() -> void:
 	_travelled_distance = 0.0
 	show()
-	particles.emitting = true
 	set_physics_process(true)
 	collision_mask = 1
 
@@ -23,7 +20,6 @@ func _physics_process(delta: float) -> void:
 		deactivate()
 
 func deactivate() -> void:
-	particles.emitting = false
 	hide()
 	set_physics_process(false)
 	collision_mask = 0

@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=8 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://bmyk0bee4ar0b" path="res://Scripts/dungeon_generator.gd" id="3_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://bx4mxpppmwhsw" path="res://Scenes/Rooms/TestRoom1.tscn" id="4_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://cfk57pqw52ful" path="res://Scenes/Rooms/test_room_2.tscn" id="4_kry3j"]
+[ext_resource type="PackedScene" uid="uid://d2r02w6bgyplt" path="res://Scenes/Corridors/test_corridor.tscn" id="5_21xkr"]
+[ext_resource type="PackedScene" uid="uid://6wbpgjf1vxn7" path="res://Scenes/Corridors/test_corridor_2.tscn" id="6_6bp64"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
-
-[node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
 color = Color(0.18600762, 0.75860554, 0.56798255, 1)
@@ -16,3 +19,12 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
 position = Vector2(-224, 0)
+
+[node name="DungeonGenerator" type="Node2D" parent="."]
+position = Vector2(-611, -223)
+script = ExtResource("3_jjvhh")
+room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j")])
+corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64")])
+
+[node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
+position = Vector2(137, -2094)

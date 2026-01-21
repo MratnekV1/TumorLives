@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://2nkt7sbqlkp1"]
+
+[ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://bmyk0bee4ar0b" path="res://Scripts/dungeon_generator.gd" id="3_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://bx4mxpppmwhsw" path="res://Scenes/Rooms/TestRoom1.tscn" id="4_jjvhh"]
+
+[node name="Main" type="Node2D"]
+y_sort_enabled = true
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+color = Color(0.18600762, 0.75860554, 0.56798255, 1)
+energy = 0.3
+blend_mode = 1
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("3_8gbba")]
+position = Vector2(-224, 0)
+
+[node name="DungeonGenerator" type="Node2D" parent="."]
+position = Vector2(-611, -223)
+script = ExtResource("3_jjvhh")
+room_templates = Array[PackedScene]([ExtResource("4_jjvhh")])
