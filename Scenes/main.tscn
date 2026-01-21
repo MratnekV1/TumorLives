@@ -1,12 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=12 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
 [ext_resource type="Script" uid="uid://bmyk0bee4ar0b" path="res://Scripts/dungeon_generator.gd" id="3_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://c5xk1abnjuq1n" path="res://Scenes/Rooms/test_room_3.tscn" id="4_344ge"]
 [ext_resource type="PackedScene" uid="uid://bx4mxpppmwhsw" path="res://Scenes/Rooms/TestRoom1.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://cfk57pqw52ful" path="res://Scenes/Rooms/test_room_2.tscn" id="4_kry3j"]
 [ext_resource type="PackedScene" uid="uid://d2r02w6bgyplt" path="res://Scenes/Corridors/test_corridor.tscn" id="5_21xkr"]
+[ext_resource type="PackedScene" uid="uid://cglumbrotjouh" path="res://Scenes/Rooms/test_room_4.tscn" id="5_ynf5e"]
 [ext_resource type="PackedScene" uid="uid://6wbpgjf1vxn7" path="res://Scenes/Corridors/test_corridor_2.tscn" id="6_6bp64"]
+[ext_resource type="PackedScene" uid="uid://cb2m4defrakil" path="res://Scenes/Corridors/test_corridor_3.tscn" id="8_d1ilt"]
+[ext_resource type="PackedScene" uid="uid://tkn5hb5h5kn4" path="res://Scenes/Corridors/test_corridor_4.tscn" id="9_6iyac"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
@@ -17,14 +21,16 @@ energy = 0.3
 blend_mode = 1
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(-224, 0)
-
 [node name="DungeonGenerator" type="Node2D" parent="."]
 position = Vector2(-611, -223)
 script = ExtResource("3_jjvhh")
-room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j")])
-corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64")])
+room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
+corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
+max_rooms = 50
+max_consecutive_corridors = 2
+
+[node name="Player" parent="." instance=ExtResource("3_8gbba")]
+position = Vector2(-224, 0)
 
 [node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
 position = Vector2(137, -2094)

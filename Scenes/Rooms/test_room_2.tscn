@@ -3854,7 +3854,7 @@ texture = ExtResource("2_5wqvn")
 sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ooio3"]
-size = Vector2(176, 152)
+size = Vector2(160, 144)
 
 [node name="TestRoom2" type="Node2D"]
 script = ExtResource("1_feg2j")
@@ -3880,5 +3880,5 @@ rotation = 1.5707964
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(32, -36)
+position = Vector2(32, -40)
 shape = SubResource("RectangleShape2D_ooio3")
