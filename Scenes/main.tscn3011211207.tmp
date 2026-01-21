@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://2nkt7sbqlkp1"]
+
+[ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
+
+[node name="Main" type="Node2D"]
+
+[node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]

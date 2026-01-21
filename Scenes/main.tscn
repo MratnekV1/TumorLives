@@ -1,7 +1,18 @@
-[gd_scene format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=3 format=3 uid="uid://2nkt7sbqlkp1"]
+
+[ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+color = Color(0.18600762, 0.75860554, 0.56798255, 1)
+energy = 0.3
+blend_mode = 1
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("3_8gbba")]
+position = Vector2(-224, 0)

@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dja6gsrix8rgw"]
+
+[ext_resource type="Script" uid="uid://drywc7usfr4nw" path="res://Scripts/enemy_base.gd" id="1_nj535"]
+[ext_resource type="Texture2D" uid="uid://btx5p7rl6gpax" path="res://icon.svg" id="2_4r3o0"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_hixxd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h0e36"]
+radius = 71.00704
+
+[node name="EnemyBase" type="RigidBody2D"]
+z_index = 1
+gravity_scale = 0.0
+script = ExtResource("1_nj535")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_h0e36")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_4r3o0")
+
+[node name="LightBulb" parent="." instance=ExtResource("3_hixxd")]
+position = Vector2(0, 1.9073486e-06)
+scale = Vector2(4.9687505, 4.1875)
+color = Color(0.74225277, 0.8200864, 0.89713573, 1)

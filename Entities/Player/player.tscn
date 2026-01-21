@@ -1,0 +1,117 @@
+[gd_scene load_steps=20 format=3 uid="uid://bl24quorgk4ub"]
+
+[ext_resource type="Script" uid="uid://xgdjueidos1r" path="res://Entities/Player/player.gd" id="1_3uyv8"]
+[ext_resource type="Shader" uid="uid://buw0rw5jyhav4" path="res://Entities/Player/playerHit.gdshader" id="1_tekja"]
+[ext_resource type="Texture2D" uid="uid://osj5hoequtar" path="res://TempImages/cells-png_2350732.png" id="2_3uyv8"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_lu8i8"]
+[ext_resource type="Shader" uid="uid://dede67e0aqdrn" path="res://Entities/Player/ImpactOverlay.gdshader" id="5_5c2io"]
+[ext_resource type="Shader" uid="uid://c0rrukdi4ju1b" path="res://Entities/Player/ChromaticAberration.gdshader" id="6_01a4e"]
+[ext_resource type="Script" uid="uid://dcdd6wmarg5sr" path="res://Entities/Player/CameraShake.gd" id="6_4wf4l"]
+[ext_resource type="Shader" uid="uid://0efl2g0gr6tn" path="res://Entities/Player/Vignette.gdshader" id="7_7a1se"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3uyv8"]
+radius = 40.1995
+
+[sub_resource type="Gradient" id="Gradient_7a1se"]
+offsets = PackedFloat32Array(0, 0.6415094, 1)
+colors = PackedColorArray(0.74509805, 0.29803923, 0.44705883, 1, 0.96862745, 0.9882353, 0.63529414, 0.6784314, 0.96862745, 0.9882353, 0.63529414, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lub02"]
+gradient = SubResource("Gradient_7a1se")
+
+[sub_resource type="Curve" id="Curve_x1y6q"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ap3xn"]
+curve = SubResource("Curve_x1y6q")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iplt1"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 24.7
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_ap3xn")
+color_ramp = SubResource("GradientTexture1D_lub02")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tekja"]
+shader = ExtResource("1_tekja")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lu8i8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_3uyv8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lub02"]
+shader = ExtResource("7_7a1se")
+shader_parameter/vignette_color = Color(0.1, 0.1, 0.2, 0.4)
+shader_parameter/radius = 0.8
+shader_parameter/softness = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7a1se"]
+shader = ExtResource("6_01a4e")
+shader_parameter/offset = 0.50000002375
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wf4l"]
+shader = ExtResource("5_5c2io")
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+motion_mode = 1
+script = ExtResource("1_3uyv8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3uyv8")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_iplt1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_tekja")
+scale = Vector2(0.259887, 0.259887)
+sprite_frames = SubResource("SpriteFrames_lu8i8")
+autoplay = "default"
+
+[node name="LightBulb" parent="." instance=ExtResource("3_lu8i8")]
+scale = Vector2(2.1562502, 1.8750001)
+energy = 0.8
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Vignette" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_lub02")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChromaticAberation" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_7a1se")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ImpactFrame" type="ColorRect" parent="CanvasLayer"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_4wf4l")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("6_4wf4l")
