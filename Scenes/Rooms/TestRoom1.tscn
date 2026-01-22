@@ -3883,6 +3883,7 @@ position = Vector2(32, -128)
 rotation = 4.712389
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(32, -48)
@@ -3905,11 +3906,11 @@ energy = 0.8
 [node name="LightBulb2" parent="Lights" instance=ExtResource("3_bjrfl")]
 position = Vector2(71.99999, -80)
 scale = Vector2(0.39111114, 0.37410626)
-color = Color(0.94900006, 0.49, 1, 1)
+color = Color(0.14880532, 0.53504807, 0.5525077, 1)
 energy = 0.8
 
 [node name="LightBulb4" parent="Lights" instance=ExtResource("3_bjrfl")]
 position = Vector2(-8, -8)
 scale = Vector2(0.35555553, 0.34009653)
-color = Color(0.95000005, 0.5, 1, 1)
+color = Color(0.6651676, 0.00067084644, 0.7303666, 1)
 energy = 0.8

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=13 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://cb2m4defrakil" path="res://Scenes/Corridors/test_corridor_3.tscn" id="8_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://tkn5hb5h5kn4" path="res://Scenes/Corridors/test_corridor_4.tscn" id="9_6iyac"]
 [ext_resource type="PackedScene" uid="uid://cmppffqmp0ogc" path="res://Scenes/test_wall.tscn" id="10_6iyac"]
-[ext_resource type="Script" uid="uid://bnpxoq8munimn" path="res://Scripts/particle_manager.gd" id="13_fdnlq"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
@@ -35,5 +34,4 @@ position = Vector2(-738, -604)
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101960786, 0.019607844, 0.050980393, 1)
 
-[node name="ParticleManager" type="Node2D" parent="."]
-script = ExtResource("13_fdnlq")
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]

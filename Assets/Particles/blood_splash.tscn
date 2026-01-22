@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://x1x7md1whk1h"]
+
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="1_g3tog"]
+
+[sub_resource type="Gradient" id="Gradient_g3tog"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.555, 0.665)
+colors = PackedColorArray(0.8992584, 0.8992584, 0.8992584, 1, 0.71, 0.71, 0.71, 0.44313726, 0.71, 0.71, 0.71, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_of00k"]
+gradient = SubResource("Gradient_g3tog")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Curve" id="Curve_ixdyg"]
+_data = [Vector2(0.5945946, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.822471, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ixdyg"]
+offsets = PackedFloat32Array(0, 0.8010204, 1)
+colors = PackedColorArray(0.6627451, 0.7137255, 0.48235294, 1, 0.47843137, 0.54509807, 0.25490198, 1, 0.5449209, 0, 0.5220287, 0)
+
+[node name="BloodSplash" type="CPUParticles2D"]
+z_index = -5
+amount = 150
+texture = SubResource("GradientTexture2D_of00k")
+lifetime = 3.0
+explosiveness = 1.0
+randomness = 0.3
+lifetime_randomness = 0.22
+emission_shape = 2
+emission_sphere_radius = 32.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 50.0
+damping_min = 15.0
+damping_max = 50.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_ixdyg")
+color = Color(0.49019608, 0.53333336, 0.20784314, 1)
+color_ramp = SubResource("Gradient_ixdyg")
+
+[node name="LightBulb" parent="." instance=ExtResource("1_g3tog")]
+scale = Vector2(0.7511111, 0.7511111)
+color = Color(0.5729907, 0.94048023, 0.5457403, 1)
+energy = 0.6
+
+[node name="LightBulb2" parent="." instance=ExtResource("1_g3tog")]
+scale = Vector2(0.7511111, 0.7511111)
+color = Color(0.5729907, 0.94048023, 0.5457403, 1)
+range_z_min = -5
+range_z_max = -5

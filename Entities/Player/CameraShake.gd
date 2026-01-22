@@ -6,9 +6,14 @@ extends Camera2D
 @export var zoom_speed := 2.0 # How fast camera changes zoom
 @export var dynamic_zoom := 0.05 # How much camera shoud move
 
+@export var lean_speed_moving := 2.0    # Speed when accelerating/moving
+@export var lean_speed_stopping := 0.8
+
 var _shake_strength := 0.0
 var _impact_strength := 0.0
 var _base_shake := 0.0
+
+var _current_lean := Vector2.ZERO
 
 # Stealth
 var _stealth_zoom_offset := 1.0
@@ -38,15 +43,18 @@ func _set_zoom(delta: float) -> void:
 
 func _count_offset(delta: float) -> void:
 	_impact_strength = lerp(_impact_strength, 0.0, shake_fade * delta)
-	
 	var total_shake = _impact_strength + _base_shake + _shake_strength
 	
+	var target_lean = player.velocity * lean_amount
+	
+	var current_lean_speed = lean_speed_moving
+	if player.velocity.length() < 10.0:
+		current_lean_speed = lean_speed_stopping
+	
+	_current_lean = lerp(_current_lean, target_lean, delta * current_lean_speed)
+	offset = _current_lean
 	if total_shake > 0:
-		offset = _get_random_offset(total_shake)
-		if total_shake < 2.0: 
-			offset += player.velocity * lean_amount
-	else:
-		offset = lerp(offset, player.velocity * lean_amount, delta * 2.0)
+		offset += _get_random_offset(total_shake)
 
 func _count_stealth_breathing(delta: float) -> void:
 	if player.is_dimming and player.velocity.length() < 10.0:

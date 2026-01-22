@@ -1,9 +1,9 @@
 class_name Player
 extends CharacterBody2D
 
-const MAX_SPEED = 500.0
+const MAX_SPEED = 800.0
 const ACCELERATION = 3000.0  # How fast player moves
-const FRICTION = 800.0 # How fast player stops
+const FRICTION = 1600.0 # How fast player stops
 
 # Dash Settings
 const DASH_SPEED = 1600.0
@@ -33,6 +33,7 @@ var dim_tween: Tween
 var is_dimming := false
 var stealth_time_left := 0.0
 var max_stealth_duration := 5.0
+signal stealth_timeout(pos: Vector2)
 
 func _process(delta: float) -> void:
 	match current_state:
@@ -45,6 +46,8 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
+		if dash_cooldown_timer <= 0:
+			_on_dash_ready()
 	
 	match current_state:
 		State.IDLE, State.WALK, State.STEALTH:
@@ -89,6 +92,8 @@ func _handle_stealth_logic(delta: float) -> void:
 			camera.apply_shake(stealth_shake_intensity)
 		
 		if stealth_time_left <= 0:
+			stealth_timeout.emit(global_position)
+			take_damage(20, global_position + Vector2.DOWN)
 			_stop_stealth(1.0, 1.5)
 
 func _handle_diming() -> void:
@@ -148,7 +153,7 @@ func _handle_dash_physics(delta: float) -> void:
 	velocity = dash_direction * DASH_SPEED
 	dash_timer -= delta
 	
-	if Engine.get_frames_drawn() % 2 == 0:
+	if Engine.get_frames_drawn() % 1 == 0:
 		_spawn_dash_ghost()
 
 	if dash_timer <= 0:
@@ -169,13 +174,36 @@ func _spawn_dash_ghost() -> void:
 	t.tween_property(ghost, "modulate:a", 0.0, 0.3)
 	t.tween_callback(ghost.queue_free)
 
+func _on_dash_ready() -> void:
+	var ghost = sprite.duplicate()
+	add_child(ghost)
+	
+	ghost.global_position = sprite.global_position
+	
+	ghost.material = ghost_material
+	ghost.scale = sprite.scale * 1.25
+	ghost.modulate.a = 0.3
+	ghost.z_index = 5
+	
+	var t = create_tween()
+	t.set_parallel(true)
+	t.tween_property(ghost, "scale", sprite.scale, 0.25)\
+		.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
+	t.tween_property(ghost, "modulate:a", 0.0, 0.25)
+	t.set_parallel(false)
+	t.tween_callback(ghost.queue_free)
+
 # Others
 
 func _handle_squash(delta: float) -> void:
 	var target_scale : Vector2
 	
 	if current_state == State.DASHING:
-		target_scale = Vector2(0.4, 0.15)
+		if abs(dash_direction.y) > abs(dash_direction.x):
+			target_scale = Vector2(0.23, 0.4)
+		else:
+			target_scale = Vector2(0.4, 0.15)
+			
 	elif is_dimming:
 		target_scale = Vector2(0.32, 0.2)
 	else:

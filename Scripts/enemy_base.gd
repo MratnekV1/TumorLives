@@ -5,7 +5,7 @@ const RANDOM_ANGLE := deg_to_rad(45.0)
 @export var pool_size := 1000
 
 # Impact Particles
-const HitParticlesScene := preload("res://Entities/Projectiles/bullet_impact_particles.tscn")
+const HitParticlesScene := preload("res://Assets/Particles/bullet_impact_particles.tscn")
 var _particle_pool := []
 var _p_index := 0
 @export var p_pool_size := 100

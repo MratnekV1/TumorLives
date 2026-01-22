@@ -21,7 +21,7 @@ func _ready():
 	await get_tree().process_frame
 	
 	
-	self.scale *= 1
+	self.scale *= 8
 
 func generate_dungeon_async():
 	var start_scene = room_templates.pick_random()
