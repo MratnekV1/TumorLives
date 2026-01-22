@@ -77,14 +77,18 @@ amount = 30
 process_material = SubResource("ParticleProcessMaterial_iplt1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 5
 material = SubResource("ShaderMaterial_tekja")
 scale = Vector2(0.259887, 0.259887)
 sprite_frames = SubResource("SpriteFrames_lu8i8")
 autoplay = "default"
 
 [node name="LightBulb" parent="." instance=ExtResource("3_lu8i8")]
-scale = Vector2(2.1562502, 1.8750001)
-energy = 0.8
+scale = Vector2(0.7511111, 0.7511111)
+color = Color(0.79679996, 0.96, 0.79952, 1)
+energy = 0.6
+range_z_min = 5
+range_z_max = 5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

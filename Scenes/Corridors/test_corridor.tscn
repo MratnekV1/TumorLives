@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://d2r02w6bgyplt"]
+[gd_scene load_steps=6 format=4 uid="uid://d2r02w6bgyplt"]
 
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_3o64c"]
+[ext_resource type="TileSet" uid="uid://dbs5n783gbnrw" path="res://Assets/TileSets/TestWalls.tres" id="2_3xsmu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
 texture = ExtResource("2_3o64c")
@@ -3853,14 +3854,18 @@ texture = ExtResource("2_3o64c")
 sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xsmu"]
-size = Vector2(16, 32)
+size = Vector2(96, 64)
 
 [node name="TestCorridor1" type="Node2D"]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="Ground" type="TileMapLayer" parent="."]
 z_index = -99
 tile_map_data = PackedByteArray("AAAAAP7/AAABAAUAAAABAP7/AAABAAUAAAACAP7/AAABAAUAAAD+//7/AAABAAUAAAD+//3/AAABAAUAAAD///3/AAABAAUAAAD///7/AAADAAIAAAABAP3/AAABAAUAAAACAP3/AAABAAUAAAAAAP3/AAABAAUAAAD9//7/AAAEAAMAAAD9//3/AAAEAAMAAAD8//3/AAAEAAMAAAD8//7/AAAEAAMAAAA=")
 tile_set = SubResource("TileSet_5aa4i")
+
+[node name="Walls" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD9//z/AAAEAAIAAAD+//z/AAAEAAIAAAD///z/AAAEAAIAAAAAAPz/AAAEAAIAAAABAPz/AAAEAAIAAAABAP//AAAEAAIAAAAAAP//AAAEAAIAAAD/////AAAEAAIAAAD+////AAAEAAIAAAD9////AAAEAAIAAAACAP//AAAEAAIAAAACAPz/AAAEAAIAAAA=")
+tile_set = ExtResource("2_3xsmu")
 
 [node name="Markers" type="Node2D" parent="."]
 

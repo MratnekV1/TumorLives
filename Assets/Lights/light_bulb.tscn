@@ -1,13 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6t1tjxjcgxb3"]
+[gd_scene load_steps=2 format=3 uid="uid://c6t1tjxjcgxb3"]
 
-[sub_resource type="Gradient" id="Gradient_3ah5o"]
-offsets = PackedFloat32Array(0, 0.61333334)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ixec"]
-gradient = SubResource("Gradient_3ah5o")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
+[ext_resource type="Texture2D" uid="uid://bkovbaqtfylng" path="res://TempImages/Soft-Focus-Blur-Circle-Concept-PNG.png" id="1_4ixec"]
 
 [node name="LightBulb" type="PointLight2D"]
-texture = SubResource("GradientTexture2D_4ixec")
+texture = ExtResource("1_4ixec")

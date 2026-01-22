@@ -17,6 +17,7 @@ var template_size_cache: Dictionary = {}
 
 func _ready():
 	generate_dungeon_async()
+	self.scale *= 8
 
 func generate_dungeon_async():
 	var start_scene = room_templates.pick_random()

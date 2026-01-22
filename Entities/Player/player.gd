@@ -41,7 +41,6 @@ func _handle_squash(delta: float) -> void:
 	
 	sprite.scale = sprite.scale.lerp(target_scale, delta * 10.0)
 	
-
 func take_damage(ammount: int, knockback_source_pos: Vector2) -> void:
 	player_current_hp = clamp(player_current_hp - ammount, 0, player_max_hp)
 	_apply_flash() 

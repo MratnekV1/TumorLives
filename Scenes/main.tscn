@@ -15,22 +15,19 @@
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
-color = Color(0.18600762, 0.75860554, 0.56798255, 1)
-energy = 0.3
-blend_mode = 1
-shadow_enabled = true
-
 [node name="DungeonGenerator" type="Node2D" parent="."]
 position = Vector2(-611, -223)
 script = ExtResource("3_jjvhh")
 room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
-max_rooms = 50
+max_rooms = 2
 max_consecutive_corridors = 2
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(-224, 0)
+position = Vector2(-222, -107)
 
 [node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
-position = Vector2(137, -2094)
+position = Vector2(-836, -471)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.101960786, 0.019607844, 0.050980393, 1)

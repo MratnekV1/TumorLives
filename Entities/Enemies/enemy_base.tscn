@@ -19,6 +19,7 @@ shape = SubResource("CircleShape2D_h0e36")
 texture = ExtResource("2_4r3o0")
 
 [node name="LightBulb" parent="." instance=ExtResource("3_hixxd")]
-position = Vector2(0, 1.9073486e-06)
-scale = Vector2(4.9687505, 4.1875)
-color = Color(0.74225277, 0.8200864, 0.89713573, 1)
+position = Vector2(0, -1.0000002)
+scale = Vector2(1.2622951, 1.2074124)
+color = Color(0, 1, 1, 1)
+energy = 1.1
