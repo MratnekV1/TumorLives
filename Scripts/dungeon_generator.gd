@@ -17,7 +17,11 @@ var template_size_cache: Dictionary = {}
 
 func _ready():
 	generate_dungeon_async()
-	self.scale *= 8
+	
+	await get_tree().process_frame
+	
+	
+	self.scale *= 1
 
 func generate_dungeon_async():
 	var start_scene = room_templates.pick_random()
@@ -34,17 +38,14 @@ func generate_dungeon_async():
 		if not is_instance_valid(current_exit): continue
 		
 		var current_chain = current_exit.get_meta("corridor_chain", 0)
-		var parent_node = current_exit.get_parent().get_parent()
 		
 		var success = try_sequence(current_exit, corridor_templates, room_templates, current_chain)
 		
 		if not success:
-			if current_chain > 0:
-				remove_corridor_chain(parent_node)
-			else:
-				close_exit(current_exit)
+			close_exit(current_exit)
 		
 	cleanup_unused_corridors()
+	verify_exits_integrity()
 
 func try_sequence(exit_a: Marker2D, list_1: Array[PackedScene], list_2: Array[PackedScene], chain: int) -> bool:
 	if attempt_placement(exit_a, list_1, chain): return true
@@ -130,19 +131,35 @@ func cleanup_unused_corridors():
 		if is_instance_valid(node) and is_segment_corridor(node) and not has_active_children(node):
 			remove_node_from_gen(node)
 	
-	for marker in open_exits:
-		if is_instance_valid(marker): marker.queue_free()
-	open_exits.clear()
+	while open_exits.size() > 0:
+		close_exit(open_exits[0])
 
 func remove_node_from_gen(node: Node2D):
 	var rect = get_node_bounds(node)
 	occupied_rects.erase(rect)
 	
-	var markers = node.get_node("Markers").get_children()
-	open_exits = open_exits.filter(func(m): return m not in markers)
+	var parent_node = hierarchy.get(node)
+	if is_instance_valid(parent_node):
+		var parent_markers = parent_node.get_node("Markers").get_children()
+		var child_markers = node.get_node("Markers").get_children()
+
+		for pm in parent_markers:
+			for cm in child_markers:
+				if pm.global_position.distance_to(cm.global_position) < 5.0:
+					pm.set_meta("is_closed", false)
+					if not open_exits.has(pm):
+						open_exits.append(pm)
+					break
 	
 	hierarchy.erase(node)
 	node.queue_free()
+
+func _close_corresponding_exit_in_parent(parent: Node2D, child: Node2D):
+	var parent_markers = parent.get_node("Markers").get_children()
+	for pm in parent_markers:
+		if pm.global_position.distance_to(child.global_position) < 5.0:
+			close_exit(pm)
+			open_exits.erase(pm)
 
 func has_active_children(parent_node: Node2D) -> bool:
 	for parent in hierarchy.values():
@@ -162,4 +179,46 @@ func is_opposite_direction(rot_a: float, rot_b: float) -> bool:
 	return abs(abs(fmod(rot_a - rot_b, TAU)) - PI) < 0.1
 
 func close_exit(marker: Marker2D):
-	if is_instance_valid(marker): marker.queue_free()
+	if not is_instance_valid(marker): return
+	
+	if marker.get_meta("is_closed", false): return
+	
+	if wall_filler_scene:
+		var wall = wall_filler_scene.instantiate()
+		marker.get_parent().add_child(wall)
+		wall.position = marker.position
+		wall.rotation = marker.rotation
+		
+		marker.set_meta("is_closed", true)
+		
+	if marker in open_exits:
+		open_exits.erase(marker)
+
+func verify_exits_integrity():
+	var total_markers = 0
+	var unconnected_but_open = 0
+	
+	for node in get_children():
+		if not node.has_node("Markers"): continue
+		
+		var markers = node.get_node("Markers").get_children()
+		for m in markers:
+			if m is Marker2D:
+				total_markers += 1
+				var is_closed = m.get_meta("is_closed", false)
+				
+				var is_connnected = false
+				for other_node in get_children():
+					if other_node == node: continue
+					if get_node_bounds(other_node).grow(2.0).has_point(m.global_position):
+						is_connnected = true
+						break
+				
+				if not is_connnected and not is_closed:
+					unconnected_but_open += 1
+					close_exit(m)
+
+	if unconnected_but_open == 0:
+		print("Weryfikacja zakończona sukcesem: Wszystkie z ", total_markers, " wyjść są poprawnie obsłużone.")
+	else:
+		print("Weryfikacja zakończona: Znaleziono ", unconnected_but_open, " błędnych przejść.")

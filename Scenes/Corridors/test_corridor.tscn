@@ -3854,7 +3854,7 @@ texture = ExtResource("2_3o64c")
 sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xsmu"]
-size = Vector2(96, 64)
+size = Vector2(112, 64)
 
 [node name="TestCorridor1" type="Node2D"]
 
@@ -3864,7 +3864,7 @@ tile_map_data = PackedByteArray("AAAAAP7/AAABAAUAAAABAP7/AAABAAUAAAACAP7/AAABAAU
 tile_set = SubResource("TileSet_5aa4i")
 
 [node name="Walls" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAD9//z/AAAEAAIAAAD+//z/AAAEAAIAAAD///z/AAAEAAIAAAAAAPz/AAAEAAIAAAABAPz/AAAEAAIAAAABAP//AAAEAAIAAAAAAP//AAAEAAIAAAD/////AAAEAAIAAAD+////AAAEAAIAAAD9////AAAEAAIAAAACAP//AAAEAAIAAAACAPz/AAAEAAIAAAA=")
+tile_map_data = PackedByteArray("AAD9//z/AAAEAAIAAAD+//z/AAAEAAIAAAD///z/AAAEAAIAAAAAAPz/AAAEAAIAAAABAPz/AAAEAAIAAAABAP//AAAEAAIAAAAAAP//AAAEAAIAAAD/////AAAEAAIAAAD+////AAAEAAIAAAD9////AAAEAAIAAAACAP//AAAEAAIAAAACAPz/AAAEAAIAAAD8//z/AAADAAIAAAD8////AAADAAIAAAA=")
 tile_set = ExtResource("2_3xsmu")
 
 [node name="Markers" type="Node2D" parent="."]

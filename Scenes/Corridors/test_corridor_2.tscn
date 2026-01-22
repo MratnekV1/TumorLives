@@ -3854,7 +3854,7 @@ texture = ExtResource("2_55hb4")
 sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vhmn8"]
-size = Vector2(64, 40)
+size = Vector2(80, 64)
 
 [node name="TestCorridor2" type="Node2D"]
 
@@ -3864,7 +3864,7 @@ tile_map_data = PackedByteArray("AAAAAP7/AAABAAUAAAABAP7/AAABAAUAAAACAP7/AAABAAU
 tile_set = SubResource("TileSet_5aa4i")
 
 [node name="Walls" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAD/////AAAEAAIAAAD///z/AAAEAAIAAAAAAPz/AAAEAAIAAAABAPz/AAAEAAIAAAACAPz/AAAEAAIAAAACAP//AAAEAAIAAAA=")
+tile_map_data = PackedByteArray("AAD/////AAAEAAIAAAD///z/AAAEAAIAAAAAAPz/AAAEAAIAAAABAPz/AAAEAAIAAAACAPz/AAAEAAIAAAACAP//AAAEAAIAAAD+//z/AAADAAIAAAD+////AAADAAIAAAA=")
 tile_set = ExtResource("2_ysfbd")
 
 [node name="Markers" type="Node2D" parent="."]
@@ -3883,5 +3883,5 @@ rotation = 1.5707964
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(8, -28)
+position = Vector2(8, -32)
 shape = SubResource("RectangleShape2D_vhmn8")
