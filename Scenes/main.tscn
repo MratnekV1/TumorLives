@@ -20,14 +20,14 @@ position = Vector2(-611, -223)
 script = ExtResource("3_jjvhh")
 room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
-max_rooms = 2
+max_rooms = 10
 max_consecutive_corridors = 2
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
 position = Vector2(-222, -107)
 
 [node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
-position = Vector2(-836, -471)
+position = Vector2(-738, -604)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101960786, 0.019607844, 0.050980393, 1)
