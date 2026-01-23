@@ -185,6 +185,8 @@ func _on_dash_ready() -> void:
 	ghost.modulate.a = 0.3
 	ghost.z_index = 5
 	
+	camera.apply_impact(2.0)
+	
 	var t = create_tween()
 	t.set_parallel(true)
 	t.tween_property(ghost, "scale", sprite.scale, 0.25)\

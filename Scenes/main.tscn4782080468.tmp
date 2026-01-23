@@ -18,6 +18,7 @@
 y_sort_enabled = true
 
 [node name="DungeonGenerator" type="Node2D" parent="."]
+position = Vector2(-611, -223)
 script = ExtResource("1_jjvhh")
 room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
@@ -25,7 +26,7 @@ wall_filler_scene = ExtResource("10_6iyac")
 max_rooms = 50
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(93, -91)
+position = Vector2(1, 1)
 
 [node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
 position = Vector2(-1572, -1234)
