@@ -9,6 +9,7 @@ extends Node2D
 @export_group("Generation Settings")
 @export var max_rooms: int = 20
 @export var max_consecutive_corridors: int = 2
+@export var forced_starter_room: PackedScene
 
 ## Internal State
 var rooms_placed_count: int = 0
@@ -25,7 +26,6 @@ func _ready() -> void:
 	
 	self.scale *= 8
 	
-
 func cache_all_templates() -> void:
 	for scene in room_templates + corridor_templates:
 		if not scene: continue
@@ -152,7 +152,9 @@ func place_actual_room(scene: PackedScene, g_pos: Vector2, used_m_pos: Vector2, 
 
 func instantiate_first_room() -> void:
 	if room_templates.is_empty(): return
-	var scene = room_templates.pick_random()
+	
+	var scene = forced_starter_room if forced_starter_room else room_templates.pick_random()
+		
 	var room = scene.instantiate()
 	add_child(room)
 	room.global_position = Vector2.ZERO

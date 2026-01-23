@@ -9,10 +9,14 @@ var shooter: Node2D
 
 @onready var raycast : RayCast2D = $RayCast2D
 
-func spawn() -> void:
+func spawn(p_shooter: Node2D = null) -> void:
+	shooter = p_shooter
 	_travelled_distance = 0.0
 	show()
 	set_physics_process(true)
+	if shooter:
+		raycast.add_exception(shooter)
+	
 	collision_mask = 1
 	raycast.enabled = true
 

@@ -66,6 +66,8 @@ shader_parameter/offset = 0.50000002375
 shader = ExtResource("5_5c2io")
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
+light_mask = 3
+visibility_layer = 3
 motion_mode = 1
 script = ExtResource("1_3uyv8")
 

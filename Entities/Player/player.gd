@@ -126,6 +126,9 @@ func _animate_light(target: float, duration: float) -> void:
 		.set_trans(Tween.TRANS_SINE)\
 		.set_ease(Tween.EASE_IN_OUT)
 
+func is_stealthing() -> bool:
+	return is_dimming or current_state == State.STEALTH
+
 # Dash Logic
 
 func _handle_dash_input() -> void:

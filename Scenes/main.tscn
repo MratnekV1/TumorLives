@@ -1,6 +1,5 @@
-[gd_scene load_steps=14 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=13 format=3 uid="uid://2nkt7sbqlkp1"]
 
-[ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="1_jjgbg"]
 [ext_resource type="Script" uid="uid://bubyb7ii1jwsr" path="res://Scripts/DungeonGenerator.gd" id="1_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://c5xk1abnjuq1n" path="res://Scenes/Rooms/test_room_3.tscn" id="4_344ge"]
@@ -22,13 +21,11 @@ script = ExtResource("1_jjvhh")
 room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
 wall_filler_scene = ExtResource("10_6iyac")
-max_rooms = 50
+max_rooms = 15
+forced_starter_room = ExtResource("4_jjvhh")
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
 position = Vector2(93, -91)
-
-[node name="EnemyBase" parent="." instance=ExtResource("1_jjgbg")]
-position = Vector2(-1572, -1234)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101960786, 0.019607844, 0.050980393, 1)
