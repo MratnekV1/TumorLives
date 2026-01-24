@@ -22,10 +22,6 @@ func _ready() -> void:
 	cache_all_templates()
 	generate_dungeon()
 	
-	await get_tree().process_frame
-	
-	self.scale *= 8
-	
 func cache_all_templates() -> void:
 	for scene in room_templates + corridor_templates:
 		if not scene: continue

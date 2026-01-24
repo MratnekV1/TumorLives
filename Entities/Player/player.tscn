@@ -17,7 +17,7 @@ radius = 40.1995
 
 [sub_resource type="Gradient" id="Gradient_7a1se"]
 offsets = PackedFloat32Array(0, 0.6415094, 1)
-colors = PackedColorArray(0.74509805, 0.29803923, 0.44705883, 1, 0.96862745, 0.9882353, 0.63529414, 0.6784314, 0.96862745, 0.9882353, 0.63529414, 0)
+colors = PackedColorArray(1, 0.36862746, 0.39607844, 1, 0.96862745, 0.9882353, 0.63529414, 0.6784314, 0.74, 0.17760001, 0.20572013, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_lub02"]
 gradient = SubResource("Gradient_7a1se")
@@ -102,6 +102,7 @@ script = ExtResource("1_3uyv8")
 shape = SubResource("CircleShape2D_3uyv8")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(0, 31)
 amount = 30
 process_material = SubResource("ParticleProcessMaterial_iplt1")
 
@@ -123,6 +124,7 @@ color = Color(0.79679996, 0.96, 0.79952, 1)
 script = ExtResource("6_4wf4l")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Vignette" type="ColorRect" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_lub02")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=42 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="Script" uid="uid://bubyb7ii1jwsr" path="res://Scripts/DungeonGenerator.gd" id="1_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
@@ -37,20 +37,21 @@ void fragment() {
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wsu2k"]
 gradient = ExtResource("14_wsu2k")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkdf5"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hptm8"]
 noise_type = 2
+seed = 2137
 cellular_return_type = 6
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1bgf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d1ilt"]
 width = 2560
 height = 1440
-noise = SubResource("FastNoiseLite_jkdf5")
+noise = SubResource("FastNoiseLite_hptm8")
 seamless = true
 seamless_blend_skirt = 0.75
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pdsj5"]
 shader = SubResource("Shader_b3802")
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_h1bgf")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_d1ilt")
 shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
 shader_parameter/density = 0.06000000285
 shader_parameter/speed = Vector2(-0.01, 0.02)
@@ -74,10 +75,29 @@ void fragment() {
 	COLOR.a *= fog * density;
 }"
 
+[sub_resource type="Gradient" id="Gradient_d1ilt"]
+offsets = PackedFloat32Array(0, 0.23214285, 1)
+colors = PackedColorArray(0.26099998, 0.29, 0, 1, 0.83, 0.74368, 0.18260002, 1, 0.54, 0.46062005, 0.01079999, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6iyac"]
+gradient = SubResource("Gradient_d1ilt")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkdf5"]
+noise_type = 2
+seed = 89
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1bgf"]
+width = 2560
+height = 1440
+noise = SubResource("FastNoiseLite_jkdf5")
+seamless = true
+seamless_blend_skirt = 0.75
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
 shader = SubResource("Shader_jkdf5")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_h1bgf")
-shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_6iyac")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(0.01, 0.01)
 
@@ -114,16 +134,22 @@ void fragment() {
 	COLOR.a *= fog * density;
 }"
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k12tt"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6iyac"]
+noise_type = 2
+seed = 56
+frequency = 0.03
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fdnlq"]
 width = 1280
 height = 720
-noise = ExtResource("14_jkdf5")
+noise = SubResource("FastNoiseLite_6iyac")
 seamless = true
 seamless_blend_skirt = 0.75
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k12tt"]
 shader = SubResource("Shader_wsu2k")
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_k12tt")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_fdnlq")
 shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(-0.01, -0.005)
@@ -147,21 +173,29 @@ void fragment() {
 	COLOR.a *= fog * density;
 }"
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_h1bgf"]
+[sub_resource type="Gradient" id="Gradient_hptm8"]
+offsets = PackedFloat32Array(0, 0.23214285, 1)
+colors = PackedColorArray(0.29, 0, 0, 1, 0.83, 0.43077004, 0.18260002, 1, 0.54, 0.01079999, 0.019619865, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d1ilt"]
+gradient = SubResource("Gradient_hptm8")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wsu2k"]
 noise_type = 2
+seed = 12
 cellular_return_type = 6
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b3802"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k12tt"]
 width = 1280
 height = 720
-noise = SubResource("FastNoiseLite_h1bgf")
+noise = SubResource("FastNoiseLite_wsu2k")
 seamless = true
 seamless_blend_skirt = 0.75
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hibaj"]
 shader = SubResource("Shader_h1bgf")
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_b3802")
-shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_k12tt")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_d1ilt")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(0.02, 0.01)
 
@@ -184,6 +218,18 @@ void fragment() {
 	COLOR.a *= fog * density;
 }"
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h1bgf"]
+noise_type = 2
+seed = 8
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b3802"]
+width = 1280
+height = 720
+noise = SubResource("FastNoiseLite_h1bgf")
+seamless = true
+seamless_blend_skirt = 0.75
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fevyy"]
 shader = SubResource("Shader_k12tt")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_b3802")
@@ -200,7 +246,7 @@ room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
 wall_filler_scene = ExtResource("10_6iyac")
 max_rooms = 15
-forced_starter_room = ExtResource("4_jjvhh")
+forced_starter_room = ExtResource("5_ynf5e")
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
 
