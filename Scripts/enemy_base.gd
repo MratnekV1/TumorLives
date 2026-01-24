@@ -39,6 +39,7 @@ const RANDOM_ANGLE := deg_to_rad(5.0)
 var _bullet_pool: Array = []
 var _particle_pool: Array = []
 var _b_index := 0
+var _p_index := 0
 
 # Shooting
 var _shoot_timer := 0.0
@@ -300,3 +301,11 @@ func _on_timer_timeout() -> void:
 		States.ALERTED:
 			current_state = States.PATROLLING
 			detection_level = 0.0
+
+func spawn_hit_effect(pos: Vector2, normal: Vector2) -> void:
+	if _particle_pool.is_empty(): return
+	
+	var particles = _particle_pool[_p_index]
+	particles.emit_at(pos, normal.angle())
+	
+	_p_index = (_p_index + 1) % particle_pool_size

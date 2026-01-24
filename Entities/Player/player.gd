@@ -35,6 +35,12 @@ var stealth_time_left := 0.0
 var max_stealth_duration := 5.0
 signal stealth_timeout(pos: Vector2)
 
+func _ready() -> void:
+	await get_tree().process_frame
+	
+	set_collision_layer_value(3, true)
+	set_collision_mask_value(3, true)
+
 func _process(delta: float) -> void:
 	match current_state:
 		State.STEALTH:
@@ -145,9 +151,12 @@ func _start_dash() -> void:
 	dash_cooldown_timer = DASH_COOLDOWN
 	
 	_apply_glitch_effect()
+	set_collision_layer_value(3, false)
+	set_collision_mask_value(3, false)
 	
 	camera.zoom_speed = 10.0
 	camera.apply_impact(8.0)
+	
 	
 	if is_dimming:
 		stealth_time_left -= 1.0
@@ -156,10 +165,12 @@ func _handle_dash_physics(delta: float) -> void:
 	velocity = dash_direction * DASH_SPEED
 	dash_timer -= delta
 	
-	if Engine.get_frames_drawn() % 1 == 0:
-		_spawn_dash_ghost()
+	#if Engine.get_frames_drawn() % 1 == 0:
+	_spawn_dash_ghost()
 
 	if dash_timer <= 0:
+		set_collision_layer_value(3, true)
+		set_collision_mask_value(3, true)
 		current_state = State.IDLE
 		velocity = dash_direction * MAX_SPEED
 		camera.zoom_speed = 2.0
@@ -277,7 +288,7 @@ func _update_vignette_pulse() -> void:
 		mat.set_shader_parameter("vignette_color", Color(0.5 * health_low_factor, 0, 0, 0.7))
 	else:
 		mat.set_shader_parameter("softness", 0.25)
-		mat.set_shader_parameter("vignette_color", Color(0.196, 0.196, 0.404, 0.396))
+		mat.set_shader_parameter("vignette_color", Color(0.063, 0.118, 0.051, 0.4))
 
 func _apply_low_hp_camera_shake(_delta: float) -> void:
 	var health_low_factor = 1.0 - (float(player_current_hp) / player_max_hp)

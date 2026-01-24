@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=31 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="Script" uid="uid://bubyb7ii1jwsr" path="res://Scripts/DungeonGenerator.gd" id="1_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
@@ -12,6 +12,158 @@
 [ext_resource type="PackedScene" uid="uid://tkn5hb5h5kn4" path="res://Scenes/Corridors/test_corridor_4.tscn" id="9_6iyac"]
 [ext_resource type="PackedScene" uid="uid://cmppffqmp0ogc" path="res://Scenes/test_wall.tscn" id="10_6iyac"]
 [ext_resource type="Script" uid="uid://bnpxoq8munimn" path="res://Scripts/particle_manager.gd" id="13_fdnlq"]
+[ext_resource type="FastNoiseLite" uid="uid://bnc6ojl6mm252" path="res://Shaders/NoiseNoise.tres" id="14_jkdf5"]
+[ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="14_wsu2k"]
+
+[sub_resource type="Shader" id="Shader_jkdf5"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wsu2k"]
+gradient = ExtResource("14_wsu2k")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkdf5"]
+noise_type = 2
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1bgf"]
+width = 2560
+height = 1440
+noise = SubResource("FastNoiseLite_jkdf5")
+seamless = true
+seamless_blend_skirt = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
+shader = SubResource("Shader_jkdf5")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_h1bgf")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.01, 0.01)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wsu2k"]
+width = 2560
+height = 1440
+noise = ExtResource("14_jkdf5")
+seamless = true
+seamless_blend_skirt = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fdnlq"]
+shader = SubResource("Shader_jkdf5")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_wsu2k")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.0670000031825
+shader_parameter/speed = Vector2(-0.01, 0.005)
+
+[sub_resource type="Shader" id="Shader_wsu2k"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k12tt"]
+width = 1280
+height = 720
+noise = ExtResource("14_jkdf5")
+seamless = true
+seamless_blend_skirt = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k12tt"]
+shader = SubResource("Shader_wsu2k")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_k12tt")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(-0.01, -0.005)
+
+[sub_resource type="Shader" id="Shader_h1bgf"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h1bgf"]
+noise_type = 2
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b3802"]
+width = 1280
+height = 720
+noise = SubResource("FastNoiseLite_h1bgf")
+seamless = true
+seamless_blend_skirt = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hibaj"]
+shader = SubResource("Shader_h1bgf")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_b3802")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.02, 0.01)
+
+[sub_resource type="Shader" id="Shader_k12tt"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fevyy"]
+shader = SubResource("Shader_k12tt")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_b3802")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.02, -0.01)
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
@@ -25,10 +177,59 @@ max_rooms = 15
 forced_starter_room = ExtResource("4_jjvhh")
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(93, -91)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101960786, 0.019607844, 0.050980393, 1)
 
 [node name="ParticleManager" type="Node2D" parent="."]
 script = ExtResource("13_fdnlq")
+
+[node name="FogBG" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="FogBG"]
+motion_scale = Vector2(0.4, 0.4)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="FogBG/ParallaxLayer"]
+material = SubResource("ShaderMaterial_b3802")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="FogBG"]
+motion_scale = Vector2(0.8, 0.8)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="FogBG/ParallaxLayer2"]
+material = SubResource("ShaderMaterial_fdnlq")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="FogFG" type="ParallaxBackground" parent="."]
+layer = 1020
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.1, 1.1)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="FogFG/ParallaxLayer"]
+material = SubResource("ShaderMaterial_k12tt")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.3, 1.3)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect2" type="ColorRect" parent="FogFG/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_hibaj")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.5, 1.5)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect2" type="ColorRect" parent="FogFG/ParallaxLayer2"]
+material = SubResource("ShaderMaterial_fevyy")
+offset_right = 1280.0
+offset_bottom = 720.0

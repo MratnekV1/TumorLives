@@ -1,7 +1,17 @@
-[gd_scene load_steps=6 format=4 uid="uid://6wbpgjf1vxn7"]
+[gd_scene load_steps=10 format=4 uid="uid://6wbpgjf1vxn7"]
 
+[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://TempImages/celllsproto2.png" id="1_vhmn8"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_55hb4"]
 [ext_resource type="TileSet" uid="uid://dbs5n783gbnrw" path="res://Assets/TileSets/TestWalls.tres" id="2_ysfbd"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_55hb4"]
+
+[sub_resource type="Curve" id="Curve_r3w52"]
+_data = [Vector2(0, 0), 0.0, 16.213484, 0, 0, Vector2(0.17117119, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4014325, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_eo0im"]
+offsets = PackedFloat32Array(0, 0.10204082, 0.84183675, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.7079665, 0.7079665, 0.7079664, 1, 0.52906674, 0.5290667, 0.5290667, 0)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
 texture = ExtResource("2_55hb4")
@@ -3858,6 +3868,31 @@ size = Vector2(80, 64)
 
 [node name="TestCorridor2" type="Node2D"]
 
+[node name="RED_BG_PARTICLES" type="CPUParticles2D" parent="."]
+z_index = -1020
+position = Vector2(0, -32)
+rotation = -3.1415925
+texture = ExtResource("1_vhmn8")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(128, 128)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_r3w52")
+color_ramp = SubResource("Gradient_eo0im")
+anim_offset_max = 1.0
+
 [node name="Ground" type="TileMapLayer" parent="."]
 z_index = -99
 tile_map_data = PackedByteArray("AAAAAP7/AAABAAUAAAABAP7/AAABAAUAAAACAP7/AAABAAUAAAD+//7/AAABAAUAAAD+//3/AAABAAUAAAD///3/AAABAAUAAAD///7/AAADAAIAAAABAP3/AAABAAUAAAACAP3/AAABAAUAAAAAAP3/AAABAAUAAAAAAP//AAAEAAMAAAABAP//AAAEAAMAAAA=")
@@ -3881,7 +3916,14 @@ position = Vector2(16, 0)
 rotation = 1.5707964
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(8, -32)
 shape = SubResource("RectangleShape2D_vhmn8")
+
+[node name="LightBulb" parent="." instance=ExtResource("3_55hb4")]
+position = Vector2(8, -32)
+scale = Vector2(0.35555556, 0.3555556)
+color = Color(0.13333334, 0.4862745, 0.627451, 1)
+energy = 0.4

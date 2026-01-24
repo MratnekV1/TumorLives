@@ -54,7 +54,7 @@ animations = [{
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lub02"]
 shader = ExtResource("7_7a1se")
-shader_parameter/vignette_color = Color(0.1, 0.1, 0.2, 0.4)
+shader_parameter/vignette_color = Color(0.0627451, 0.08235294, 0.050980393, 0.4)
 shader_parameter/radius = 0.8
 shader_parameter/softness = 0.5
 
@@ -66,8 +66,8 @@ shader_parameter/offset = 0.50000002375
 shader = ExtResource("5_5c2io")
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
-light_mask = 3
-visibility_layer = 3
+collision_layer = 2
+collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_3uyv8")
 

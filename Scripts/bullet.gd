@@ -17,7 +17,8 @@ func spawn(p_shooter: Node2D = null) -> void:
 	if shooter:
 		raycast.add_exception(shooter)
 	
-	collision_mask = 1
+	collision_mask = 1 + 4
+	raycast.collision_mask = collision_mask
 	raycast.enabled = true
 
 func _physics_process(delta: float) -> void:

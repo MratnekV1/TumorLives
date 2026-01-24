@@ -1,7 +1,18 @@
-[gd_scene load_steps=7 format=4 uid="uid://tkn5hb5h5kn4"]
+[gd_scene load_steps=12 format=4 uid="uid://tkn5hb5h5kn4"]
 
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_2vsg7"]
 [ext_resource type="TileSet" uid="uid://dbs5n783gbnrw" path="res://Assets/TileSets/TestWalls.tres" id="2_6kgg8"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_2vsg7"]
+[ext_resource type="Texture2D" uid="uid://sf6o0j0efp10" path="res://TempImages/celllsproto1.png" id="4_r3vy3"]
+[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://TempImages/celllsproto2.png" id="5_o8moo"]
+
+[sub_resource type="Curve" id="Curve_dadxo"]
+_data = [Vector2(0, 0), 0.0, 16.213484, 0, 0, Vector2(0.17117119, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4014325, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_mkyfi"]
+offsets = PackedFloat32Array(0, 0.10204082, 0.84183675, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.7079665, 0.7079665, 0.7079664, 1, 0.52906674, 0.5290667, 0.5290667, 0)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
 texture = ExtResource("2_2vsg7")
@@ -3861,6 +3872,57 @@ size = Vector2(48, 176)
 
 [node name="TestCorridor4" type="Node2D"]
 
+[node name="RED_BG_PARTICLES" type="CPUParticles2D" parent="."]
+process_mode = 3
+z_index = -1020
+position = Vector2(0, -32)
+rotation = 1.5707964
+texture = ExtResource("4_r3vy3")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(128, 128)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_dadxo")
+color_ramp = SubResource("Gradient_mkyfi")
+anim_offset_max = 1.0
+
+[node name="RED_BG_PARTICLES2" type="CPUParticles2D" parent="."]
+process_mode = 3
+z_index = -1020
+position = Vector2(104, -152)
+texture = ExtResource("5_o8moo")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(128, 128)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_dadxo")
+color_ramp = SubResource("Gradient_mkyfi")
+anim_offset_max = 1.0
+
 [node name="Ground" type="TileMapLayer" parent="."]
 z_index = -99
 tile_map_data = PackedByteArray("AAAAAP7/AAABAAUAAAABAP7/AAABAAUAAAACAP7/AAABAAUAAAD+//7/AAABAAUAAAD+//3/AAABAAUAAAD///3/AAABAAUAAAD///7/AAADAAIAAAABAP3/AAABAAUAAAACAP3/AAABAAUAAAAAAP3/AAABAAUAAAADAP7/AAAEAAIAAAADAP3/AAAEAAIAAAAEAP3/AAAEAAIAAAAEAP7/AAAEAAIAAAAFAP7/AAAEAAIAAAAFAP3/AAAEAAIAAAAFAPz/AAAEAAIAAAAEAPz/AAAEAAIAAAAEAPv/AAAEAAIAAAAEAPr/AAAEAAIAAAAEAPn/AAAEAAIAAAAEAPj/AAAEAAIAAAAEAPf/AAAEAAIAAAAFAPf/AAAEAAIAAAAFAPj/AAAEAAIAAAAFAPn/AAAEAAIAAAAFAPr/AAAEAAIAAAAFAPv/AAAEAAIAAAAEAPb/AAAEAAIAAAAFAPb/AAAEAAIAAAAEAPX/AAAEAAIAAAAFAPX/AAAEAAIAAAAGAPj/AAAEAAIAAAAGAPn/AAAEAAIAAAAFAP//AAAEAAIAAAAEAP//AAAEAAIAAAAGAP3/AAAEAAIAAAAGAP7/AAAEAAIAAAABAPz/AAAEAAIAAAAAAPz/AAAEAAIAAAA=")
@@ -3895,6 +3957,7 @@ position = Vector2(80, -176)
 rotation = 4.712389
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(32, -40)
@@ -3903,3 +3966,29 @@ shape = SubResource("RectangleShape2D_pwo7m")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(88, -88)
 shape = SubResource("RectangleShape2D_r3vy3")
+
+[node name="Lights" type="Node2D" parent="."]
+
+[node name="LightBulb" parent="Lights" instance=ExtResource("3_2vsg7")]
+position = Vector2(0, -32)
+scale = Vector2(0.35555556, 0.3555556)
+color = Color(0.87058824, 0.043137256, 0.46666667, 1)
+energy = 0.4
+
+[node name="LightBulb2" parent="Lights" instance=ExtResource("3_2vsg7")]
+position = Vector2(80, -96)
+scale = Vector2(0.35555556, 0.3555556)
+color = Color(0.87058824, 0.043137256, 0.46666667, 1)
+energy = 0.4
+
+[node name="LightBulb3" parent="Lights" instance=ExtResource("3_2vsg7")]
+position = Vector2(80, -32)
+scale = Vector2(0.35555556, 0.3555556)
+color = Color(0.13333334, 0.4862745, 0.627451, 1)
+energy = 0.4
+
+[node name="LightBulb4" parent="Lights" instance=ExtResource("3_2vsg7")]
+position = Vector2(80, -160)
+scale = Vector2(0.35555556, 0.3555556)
+color = Color(0.13333334, 0.4862745, 0.627451, 1)
+energy = 0.4

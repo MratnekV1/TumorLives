@@ -3925,7 +3925,7 @@ size = Vector2(16, 64)
 [node name="TestWall" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
-modulate = Color(1, 0, 1, 1)
+modulate = Color(0.5833334, 1, 0, 1)
 z_index = -99
 tile_map_data = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_5aa4i")

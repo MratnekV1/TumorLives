@@ -1,8 +1,18 @@
-[gd_scene load_steps=7 format=4 uid="uid://cfk57pqw52ful"]
+[gd_scene load_steps=11 format=4 uid="uid://cfk57pqw52ful"]
 
+[ext_resource type="Texture2D" uid="uid://sf6o0j0efp10" path="res://TempImages/celllsproto1.png" id="1_tmya2"]
+[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://TempImages/celllsproto2.png" id="2_1nilt"]
 [ext_resource type="Texture2D" uid="uid://cmea5c46fwnms" path="res://TempImages/808080.png" id="2_5wqvn"]
 [ext_resource type="TileSet" uid="uid://dbs5n783gbnrw" path="res://Assets/TileSets/TestWalls.tres" id="2_feg2j"]
 [ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_5wqvn"]
+
+[sub_resource type="Curve" id="Curve_yfgtv"]
+_data = [Vector2(0, 0), 0.0, 16.213484, 0, 0, Vector2(0.17117119, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4014325, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_c216q"]
+offsets = PackedFloat32Array(0, 0.10204082, 0.84183675, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.7079665, 0.7079665, 0.7079664, 1, 0.52906674, 0.5290667, 0.5290667, 0)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjrfl"]
 texture = ExtResource("2_5wqvn")
@@ -3858,6 +3868,56 @@ sources/0 = SubResource("TileSetAtlasSource_bjrfl")
 size = Vector2(192, 176)
 
 [node name="TestRoom2" type="Node2D"]
+
+[node name="RED_BG_PARTICLES" type="CPUParticles2D" parent="."]
+z_index = -1020
+position = Vector2(32, -40)
+rotation = -3.9269907
+texture = ExtResource("1_tmya2")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(256, 256)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_yfgtv")
+color_ramp = SubResource("Gradient_c216q")
+anim_offset_max = 1.0
+
+[node name="GREEN_BG_PARTICLES2" type="CPUParticles2D" parent="."]
+z_index = -1020
+position = Vector2(32, -40)
+rotation = -1.5707964
+texture = ExtResource("2_1nilt")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(256, 256)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_yfgtv")
+color_ramp = SubResource("Gradient_c216q")
+anim_offset_max = 1.0
 
 [node name="Ground" type="TileMapLayer" parent="."]
 z_index = -99
