@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=33 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="Script" uid="uid://bubyb7ii1jwsr" path="res://Scripts/DungeonGenerator.gd" id="1_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
@@ -15,7 +15,7 @@
 [ext_resource type="FastNoiseLite" uid="uid://bnc6ojl6mm252" path="res://Shaders/NoiseNoise.tres" id="14_jkdf5"]
 [ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="14_wsu2k"]
 
-[sub_resource type="Shader" id="Shader_jkdf5"]
+[sub_resource type="Shader" id="Shader_b3802"]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_texture: repeat_enable, filter_nearest;
@@ -47,6 +47,32 @@ height = 1440
 noise = SubResource("FastNoiseLite_jkdf5")
 seamless = true
 seamless_blend_skirt = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pdsj5"]
+shader = SubResource("Shader_b3802")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_h1bgf")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wsu2k")
+shader_parameter/density = 0.06000000285
+shader_parameter/speed = Vector2(-0.01, 0.02)
+
+[sub_resource type="Shader" id="Shader_jkdf5"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
 shader = SubResource("Shader_jkdf5")
@@ -185,6 +211,15 @@ color = Color(0.101960786, 0.019607844, 0.050980393, 1)
 script = ExtResource("13_fdnlq")
 
 [node name="FogBG" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="FogBG"]
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="FogBG/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_pdsj5")
+offset_right = 1280.0
+offset_bottom = 720.0
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="FogBG"]
 motion_scale = Vector2(0.4, 0.4)
