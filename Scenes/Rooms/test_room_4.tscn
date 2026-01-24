@@ -184,13 +184,13 @@ scale = Vector2(8.18, 8.18)
 position = Vector2(0, -88)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb3" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(64, -16)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb2" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(71.99999, -80)
@@ -208,49 +208,49 @@ energy = 0.8
 position = Vector2(-88, -32)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb6" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(120, -144)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb7" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(200, -280)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb8" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(328, -208)
 scale = Vector2(0.85333335, 0.7822222)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb9" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(208, 8)
 scale = Vector2(0.85333335, 0.7822222)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb10" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(16.00003, 143.99997)
 scale = Vector2(0.85333335, 0.7822222)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb11" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(216, 167.99997)
 scale = Vector2(0.85333335, 0.7822222)
 color = Color(1, 0.2, 0.33333334, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb12" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(120, 72)
 scale = Vector2(0.60444444, 0.60444444)
 color = Color(0.82486224, 0.0010862148, 0.90451854, 1)
-energy = 0.8
+energy = 0.6
 
 [node name="LightBulb13" parent="Lights" instance=ExtResource("3_ynegw")]
 position = Vector2(216, -136)

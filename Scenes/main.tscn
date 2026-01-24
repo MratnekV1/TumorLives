@@ -246,7 +246,7 @@ room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3
 corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
 wall_filler_scene = ExtResource("10_6iyac")
 max_rooms = 15
-forced_starter_room = ExtResource("5_ynf5e")
+forced_starter_room = ExtResource("4_344ge")
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
 

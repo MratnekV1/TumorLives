@@ -51,17 +51,16 @@ tile_map_data = PackedByteArray("AAAAAP7/BAAAAAMAAAABAP7/BAABAAEAAAACAP7/BAACAAI
 tile_set = ExtResource("2_vhmn8")
 
 [node name="Markers" type="Node2D" parent="."]
-scale = Vector2(8.22, 8.22)
 
 [node name="Exit1" type="Marker2D" parent="Markers"]
-position = Vector2(-32, -32)
+position = Vector2(-252, -264)
 rotation = 3.1415927
 
 [node name="Exit2" type="Marker2D" parent="Markers"]
-position = Vector2(46.71533, -32.116787)
+position = Vector2(384, -264)
 
 [node name="Exit3" type="Marker2D" parent="Markers"]
-position = Vector2(15.571775, -0.97323596)
+position = Vector2(132, -12)
 rotation = 1.5707964
 
 [node name="Area2D" type="Area2D" parent="."]
