@@ -86,6 +86,8 @@ func _handle_movement(delta: float) -> void:
 		dash_direction = direction.normalized()
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		
+	Animations.choose_animation_direction(direction, sprite, "idle")
 
 # Stealth Logic
 
