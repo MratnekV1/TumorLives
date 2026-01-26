@@ -14,16 +14,24 @@ var dash_cooldown_timer := 0.0
 var dash_direction := Vector2.ZERO
 
 var player_max_hp := 100
-var player_current_hp := player_max_hp
+var player_current_hp := 100
 
-enum State {IDLE, WALK, DASHING, STEALTH, DYING}
+enum State {IDLE, WALK, DASHING, STEALTH, DYING, INFECTING}
 var current_state: State = State.IDLE
+
+# Animation
+var last_direction: Vector2
+var current_animation := "idle"
+const RUN_THRESHOLD := 230
+const WALK_TRESHOLD := 50
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var impact_overlay: ColorRect = $CanvasLayer/ImpactFrame
 @onready var aberration_rect: ColorRect = $CanvasLayer/ChromaticAberation
+@onready var death_overlay: ColorRect = $CanvasLayer/DeathOverlay
 @onready var vignette: ColorRect = $CanvasLayer/Vignette
 @onready var camera: Camera2D = $Camera2D
+@onready var infection_area: Area2D = $InfectionArea
 
 @onready var ghost_material = preload("res://Shaders/invertedColorShader.gdshader")
 
@@ -31,9 +39,16 @@ var current_state: State = State.IDLE
 @onready var lightBulb: PointLight2D = $LightBulb
 var dim_tween: Tween
 var is_dimming := false
-var stealth_time_left := 0.0
+var stealth_time_left := 5.0
 var max_stealth_duration := 5.0
+const STEALTH_REGEN_SPEED = 0.8
+const STEALTH_MIN_THRESHOLD = 1.0
+
 signal stealth_timeout(pos: Vector2)
+
+# Infection
+var infection_particles_scene = preload("res://Assets/Particles/infection_effect.tscn")
+var active_infection_effects = {}
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -46,20 +61,27 @@ func _process(delta: float) -> void:
 		State.STEALTH:
 			_handle_stealth_logic(delta)
 			
+	Animations.choose_animation_direction(last_direction, sprite, current_animation)
 	_update_vignette_pulse()
 	_apply_low_hp_camera_shake(delta)
 
 func _physics_process(delta: float) -> void:
+	if current_state == State.DYING:
+		return
+	
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
 		if dash_cooldown_timer <= 0:
 			_on_dash_ready()
 	
+	_regenerate_stealth(delta)
+	
 	match current_state:
-		State.IDLE, State.WALK, State.STEALTH:
+		State.IDLE, State.WALK, State.STEALTH, State.INFECTING:
 			_handle_movement(delta)
 			_handle_diming()
 			_handle_dash_input()
+			_handle_infection_input(delta)
 		State.DASHING:
 			_handle_dash_physics(delta)
 			
@@ -68,15 +90,20 @@ func _physics_process(delta: float) -> void:
 	_update_state()
 	
 func _update_state() -> void:
-	if current_state == State.DASHING or current_state == State.DYING:
-		return
-	
+	if current_state == State.DYING: return
+	if player_current_hp <= 0:
+		current_state = State.DYING
+		_handle_dying()
+		
+	if current_state == State.DASHING: return
+	if current_state == State.INFECTING: return
+		
 	if is_dimming:
 		current_state = State.STEALTH
 	elif velocity.length() > 10.0:
 		current_state = State.WALK
 	else:
-		current_state = State.IDLE	
+		current_state = State.IDLE
 
 func _handle_movement(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -84,10 +111,16 @@ func _handle_movement(delta: float) -> void:
 	if direction != Vector2.ZERO:
 		velocity = velocity.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 		dash_direction = direction.normalized()
+		last_direction = direction
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 		
-	Animations.choose_animation_direction(direction, sprite, "idle")
+	if velocity.length() > RUN_THRESHOLD:
+		current_animation = "run"
+	elif velocity.length() > WALK_TRESHOLD:
+		current_animation = "walk"
+	else:
+		current_animation = "idle"
 
 # Stealth Logic
 
@@ -100,27 +133,26 @@ func _handle_stealth_logic(delta: float) -> void:
 			camera.apply_shake(stealth_shake_intensity)
 		
 		if stealth_time_left <= 0:
+			stealth_time_left = 0
 			stealth_timeout.emit(global_position)
 			take_damage(20, global_position + Vector2.DOWN)
 			_stop_stealth(1.0, 1.5)
 
 func _handle_diming() -> void:
-	if Input.is_action_just_pressed("ctr_dim"):
+	if Input.is_action_just_pressed("ctr_dim") and stealth_time_left > STEALTH_MIN_THRESHOLD:
 		_start_stealth(0.4, 0.3)
-	elif Input.is_action_just_released("ctr_dim") and stealth_time_left > 0:
+	elif Input.is_action_just_released("ctr_dim") and is_dimming:
 		_stop_stealth(1.0, 0.5)
 
 func _start_stealth(target_energy: float, duration: float) -> void:
 	is_dimming = true
-	stealth_time_left = max_stealth_duration
 	_animate_light(target_energy, duration)
 	_animate_aberration(2.2, duration)
 	
-	camera.set_stealth_zoom(1.25, 0.3, max_stealth_duration)
+	camera.set_stealth_zoom(1.25, 0.3, stealth_time_left)
 
 func _stop_stealth(target_energy: float, duration: float) -> void:
 	is_dimming = false
-	stealth_time_left = 0
 	_animate_light(target_energy, duration)
 	_animate_aberration(0.5, duration)
 	camera.set_stealth_zoom(1.0, 0.5, 0.0)
@@ -136,6 +168,12 @@ func _animate_light(target: float, duration: float) -> void:
 
 func is_stealthing() -> bool:
 	return is_dimming or current_state == State.STEALTH
+
+func _regenerate_stealth(delta: float) -> void:
+	if stealth_time_left > max_stealth_duration or is_stealthing(): return
+		
+	stealth_time_left += delta * STEALTH_REGEN_SPEED
+	stealth_time_left = min(stealth_time_left, max_stealth_duration)
 
 # Dash Logic
 
@@ -211,6 +249,88 @@ func _on_dash_ready() -> void:
 	t.set_parallel(false)
 	t.tween_callback(ghost.queue_free)
 
+# Infection Logic
+
+func _handle_infection_input(delta: float) -> void:
+	if Input.is_action_pressed("infect"):
+		current_state = State.INFECTING
+		var areas = infection_area.get_overlapping_areas()
+		var current_targets = []
+		
+		for area in areas:
+			var is_done = area.get("is_fully_infected")
+			var can_be_infected = area.has_method("apply_infection")
+			
+			if can_be_infected and not is_done:
+				current_targets.append(area)
+				_apply_infection(area, delta)
+			elif active_infection_effects.has(area):
+					_remove_single_effect(area)
+			
+		_remove_out_of_range_infection(current_targets)
+		_update_effect_position()
+		
+		velocity *= 0.5
+	elif current_state == State.INFECTING:
+		_clear_infection_effects()
+		current_state = State.IDLE
+		
+func _apply_infection(area: Area2D, delta: float) -> void:
+		area.apply_infection(60.0 * delta)
+		
+		if not active_infection_effects.has(area):
+			var fx = infection_particles_scene.instantiate()
+			fx.global_position = global_position
+			fx.look_at(area.global_position)
+			
+			get_parent().add_child(fx)
+			fx.target = area
+			active_infection_effects[area] = fx
+
+func _remove_out_of_range_infection(current_targets) -> void:
+	var active_targets = active_infection_effects.keys()
+	for target_node in active_targets:
+			if target_node not in current_targets:
+				_remove_single_effect(target_node)
+
+func _remove_single_effect(area):
+	if active_infection_effects.has(area):
+		var fx = active_infection_effects[area]
+		if is_instance_valid(fx):
+			fx.target = null
+		active_infection_effects.erase(area)
+
+func _update_effect_position() -> void:
+	for target_node in active_infection_effects:
+			active_infection_effects[target_node].global_position = global_position
+
+func _clear_infection_effects():
+	for fx in active_infection_effects.values():
+		if is_instance_valid(fx):
+			fx.target = null
+	active_infection_effects.clear()
+
+# Dying
+
+func _handle_dying() -> void:
+	velocity = Vector2.ZERO
+	
+	Engine.time_scale = 0.00001
+	
+	var tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_ignore_time_scale(true)
+	camera.apply_impact(20.0)
+	
+	tween.tween_property(death_overlay, "modulate:a", 1.5, 1.2)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+		
+	tween.tween_callback(func():
+		Engine.time_scale = 1.0
+		get_tree().change_scene_to_file("res://Scenes/death_screen.tscn")
+	)
+
 # Others
 
 func _handle_squash(delta: float) -> void:
@@ -239,9 +359,10 @@ func take_damage(ammount: int, knockback_source_pos: Vector2) -> void:
 	camera.apply_impact(15.0)
 	
 	# Knockback
-	var knockback_strength = 500.0
-	var knockback_dir = global_position.direction_to(knockback_source_pos) * -1
-	velocity = knockback_dir * knockback_strength
+	if player_current_hp > 0:
+		var knockback_strength = 500.0
+		var knockback_dir = global_position.direction_to(knockback_source_pos) * -1
+		velocity = knockback_dir * knockback_strength
 
 func _apply_flash() -> void:
 	var mat = sprite.material as ShaderMaterial

@@ -17,10 +17,14 @@ var open_exits: Array[Marker2D] = []
 var occupied_rects: Array[Rect2] = []
 var template_data_cache: Dictionary = {}
 
+signal dungeon_generated
+
 func _ready() -> void:
 	randomize()
 	cache_all_templates()
 	generate_dungeon()
+	
+	dungeon_generated.emit()
 	
 func cache_all_templates() -> void:
 	for scene in room_templates + corridor_templates:
@@ -57,6 +61,7 @@ func generate_dungeon() -> void:
 	instantiate_first_room()
 	
 	var attempts = 0
+	var licznik = 0
 	while open_exits.size() > 0 and rooms_placed_count < max_rooms and attempts < 100:
 		var current_exit = open_exits.pop_front()
 		if not is_instance_valid(current_exit): continue
@@ -69,6 +74,10 @@ func generate_dungeon() -> void:
 			place_wall_filler(exit_global_pos, exit_global_rot)
 		
 		attempts += 1
+		
+		licznik+=1
+		if licznik%5==0:
+			await get_tree().process_frame
 	
 	# Zamknij resztę
 	for exit in open_exits:

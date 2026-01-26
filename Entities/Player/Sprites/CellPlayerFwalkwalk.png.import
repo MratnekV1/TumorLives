@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tboo1un3lqde"
-path="res://.godot/imported/celllsproto2.png-41c593da4237c287361f6df25c7b4d5d.ctex"
+uid="uid://b55qboaj60su2"
+path="res://.godot/imported/CellPlayerFwalkwalk.png-a1545bbd5b0fe2912f9871e2aad6d176.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://TempImages/celllsproto2.png"
-dest_files=["res://.godot/imported/celllsproto2.png-41c593da4237c287361f6df25c7b4d5d.ctex"]
+source_file="res://Entities/Player/Sprites/CellPlayerFwalkwalk.png"
+dest_files=["res://.godot/imported/CellPlayerFwalkwalk.png-a1545bbd5b0fe2912f9871e2aad6d176.ctex"]
 
 [params]
 

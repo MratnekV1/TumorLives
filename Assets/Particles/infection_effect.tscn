@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://dvylh7ao1wrsy"]
+
+[ext_resource type="Script" uid="uid://cbpet5ceui11j" path="res://Assets/Particles/infection_effect.gd" id="1_yudn6"]
+
+[sub_resource type="Gradient" id="Gradient_l47q8"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.6890244)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vwppx"]
+gradient = SubResource("Gradient_l47q8")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Curve" id="Curve_yudn6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.702244, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_yudn6"]
+offsets = PackedFloat32Array(0, 0.4125, 0.74375, 1)
+colors = PackedColorArray(0.2075, 0.83, 0, 1, 0.66, 0.59400004, 0, 1, 0.87, 0, 0, 0.4509804, 1, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_xra3r"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_yudn6"]
+gradient = SubResource("Gradient_xra3r")
+
+[node name="InfectionEffect" type="CPUParticles2D"]
+z_index = -5
+amount = 30
+texture = SubResource("GradientTexture2D_vwppx")
+spread = 15.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+orbit_velocity_max = 0.01
+scale_amount_min = 0.3
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_yudn6")
+color_ramp = SubResource("Gradient_yudn6")
+script = ExtResource("1_yudn6")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(144.5, 0.49999714)
+scale = Vector2(5.265625, 2.6718748)
+color = Color(0.23921569, 0.9607843, 0.2509804, 1)
+energy = 0.6
+range_z_min = -5
+range_z_max = -5
+texture = SubResource("GradientTexture2D_yudn6")

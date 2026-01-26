@@ -1,0 +1,159 @@
+[gd_scene load_steps=19 format=3 uid="uid://fynjfsfiahub"]
+
+[ext_resource type="Script" uid="uid://exp2byo2cfax" path="res://Scripts/progress_bar.gd" id="1_fim2r"]
+[ext_resource type="StyleBox" uid="uid://bq1ctu1cphnto" path="res://fonts/main_menuButtons.tres" id="2_31xe0"]
+[ext_resource type="FontFile" uid="uid://cgjdfj50u0yeo" path="res://fonts/ChakraPetch-Bold.ttf" id="2_mml6u"]
+[ext_resource type="StyleBox" uid="uid://cch23xgdgvs43" path="res://fonts/LoadinBAR.tres" id="3_hl3gf"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="4_4tbtc"]
+[ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="5_1lxvg"]
+[ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="5_dlcsm"]
+[ext_resource type="Texture2D" uid="uid://daj88r3o8brfw" path="res://Assets/NoiseTextures/MainBGParaL3.tres" id="6_hl3gf"]
+[ext_resource type="Texture2D" uid="uid://bejmpxqp4j7al" path="res://Assets/NoiseTextures/MainBGParaL0.tres" id="7_1lxvg"]
+[ext_resource type="Texture2D" uid="uid://cilxdl0cbmhtd" path="res://Assets/NoiseTextures/MainBGParaL2.tres" id="8_mml6u"]
+
+[sub_resource type="Shader" id="Shader_mml6u"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rl1o0"]
+gradient = ExtResource("5_dlcsm")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rl1o0"]
+shader = SubResource("Shader_mml6u")
+shader_parameter/noise_texture = ExtResource("6_hl3gf")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_rl1o0")
+shader_parameter/density = 0.06000000285
+shader_parameter/speed = Vector2(-0.01, 0.02)
+
+[sub_resource type="Shader" id="Shader_w76sl"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="Gradient" id="Gradient_w76sl"]
+offsets = PackedFloat32Array(0, 0.23214285, 1)
+colors = PackedColorArray(0.26099998, 0.29, 0, 1, 0.83, 0.74368, 0.18260002, 1, 0.54, 0.46062005, 0.01079999, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wwomi"]
+gradient = SubResource("Gradient_w76sl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwomi"]
+shader = SubResource("Shader_w76sl")
+shader_parameter/noise_texture = ExtResource("7_1lxvg")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_wwomi")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.01, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5cse4"]
+shader = SubResource("Shader_w76sl")
+shader_parameter/noise_texture = ExtResource("8_mml6u")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_rl1o0")
+shader_parameter/density = 0.0670000031825
+shader_parameter/speed = Vector2(-0.01, 0.005)
+
+[node name="Loading" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fim2r")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.101960786, 0.019607844, 0.050980393, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="CenterContainer"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47, 0, 0.28200018, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("2_mml6u")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/background = ExtResource("2_31xe0")
+theme_override_styles/fill = ExtResource("3_hl3gf")
+rounded = true
+
+[node name="LightBulb" parent="." instance=ExtResource("4_4tbtc")]
+position = Vector2(795.00006, 364)
+scale = Vector2(1.9244444, 1.8127578)
+color = Color(0.61, 0.09760002, 0.57584006, 1)
+energy = 5.0
+script = ExtResource("5_1lxvg")
+float_amplitude = 15.0
+flicker_speed = 0.5
+
+[node name="LightBulb3" parent="." instance=ExtResource("4_4tbtc")]
+position = Vector2(448, 320)
+scale = Vector2(2.0955555, 1.6604917)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 2.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FogBG" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_rl1o0")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.4, 0.4)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer"]
+material = SubResource("ShaderMaterial_wwomi")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.8, 0.8)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer2"]
+material = SubResource("ShaderMaterial_5cse4")
+offset_right = 1280.0
+offset_bottom = 720.0

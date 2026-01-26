@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://cixinu4w88aym"]
+
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="1_h6jg3"]
+[ext_resource type="Texture2D" uid="uid://cde80vrxmre7b" path="res://Assets/Cells/BlueCell.png" id="1_javk4"]
+[ext_resource type="Script" uid="uid://dhrassccspgy6" path="res://Scripts/Cell.gd" id="1_rdfli"]
+[ext_resource type="Shader" uid="uid://mk410mgqdw4x" path="res://Shaders/BlueCell.gdshader" id="3_ktk1n"]
+[ext_resource type="Shader" uid="uid://b32w0w621gsxg" path="res://Shaders/ShadowRemover.gdshader" id="3_yc8tp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h6jg3"]
+radius = 72.0
+height = 144.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yc8tp"]
+radius = 112.00446
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ktk1n"]
+frequency = 0.0171
+domain_warp_enabled = true
+domain_warp_type = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yc8tp"]
+noise = SubResource("FastNoiseLite_ktk1n")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yc8tp"]
+resource_local_to_scene = true
+shader = ExtResource("3_ktk1n")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_yc8tp")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.0499999988824
+shader_parameter/burn_color = Color(0.76179475, 0.3787927, 0.26327643, 1)
+shader_parameter/alpha_threshold = 0.606000028785
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_72d7w"]
+shader = ExtResource("3_yc8tp")
+shader_parameter/alpha_threshold = 0.59600002831
+shader_parameter/cutoff_height = 0.734000034865
+
+[node name="BlueCell" type="Area2D"]
+y_sort_enabled = true
+script = ExtResource("1_rdfli")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_h6jg3")
+
+[node name="ScaredArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScaredArea"]
+visible = false
+shape = SubResource("CircleShape2D_yc8tp")
+
+[node name="LightBulb" parent="." instance=ExtResource("1_h6jg3")]
+scale = Vector2(0.7511111, 0.7511111)
+color = Color(0.79679996, 0.96, 0.79952, 1)
+
+[node name="Sprite" type="Node2D" parent="."]
+scale = Vector2(0.08, 0.08)
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite"]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_yc8tp")
+texture = ExtResource("1_javk4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Sprite/Sprite2D"]
+modulate = Color(0, 0.8352941, 0.105882354, 1)
+show_behind_parent = true
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_72d7w")
+position = Vector2(0, -12.5)
+texture = ExtResource("1_javk4")

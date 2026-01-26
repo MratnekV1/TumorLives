@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcr60f0djp5wo"]
+
+[ext_resource type="Script" uid="uid://bk0k466thx5n4" path="res://Scripts/death_screen.gd" id="1_dmfwj"]
+[ext_resource type="FontFile" uid="uid://7uw8n5ub4tnu" path="res://fonts/Skranji-Regular.ttf" id="1_tpvs2"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="2_l3qio"]
+[ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="3_l3qio"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2c8yj"]
+font = ExtResource("1_tpvs2")
+font_size = 128
+font_color = Color(1, 0, 0, 1)
+outline_size = 50
+outline_color = Color(0.01, 0.01, 0.0069999998, 1)
+
+[node name="DeathScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dmfwj")
+
+[node name="DeathOverlay" type="ColorRect" parent="."]
+process_mode = 3
+z_index = -50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.101960786, 0.019607844, 0.050980393, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CenterContainer"]
+layout_mode = 2
+text = "YOU DIED"
+label_settings = SubResource("LabelSettings_2c8yj")
+
+[node name="LightBulb3" parent="." instance=ExtResource("2_l3qio")]
+position = Vector2(732, 393)
+scale = Vector2(0.7955555, 0.8529232)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 1.5
+script = ExtResource("3_l3qio")
+float_amplitude = 50.0
+flicker_speed = 1.2
+
+[node name="LightBulb4" parent="." instance=ExtResource("2_l3qio")]
+position = Vector2(376, 409)
+scale = Vector2(0.7955555, 0.8529232)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 1.5
+script = ExtResource("3_l3qio")
+flicker_speed = 0.5
+
+[node name="LightBulb6" parent="." instance=ExtResource("2_l3qio")]
+position = Vector2(574.5, 268.54617)
+scale = Vector2(0.8022222, 0.850906)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 1.5
+script = ExtResource("3_l3qio")
+flicker_speed = 0.5
+
+[node name="LightBulb5" parent="." instance=ExtResource("2_l3qio")]
+position = Vector2(929, 264)
+scale = Vector2(0.7955555, 0.8529232)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 1.5
+script = ExtResource("3_l3qio")
+float_amplitude = 0.0
+flicker_speed = 0.2

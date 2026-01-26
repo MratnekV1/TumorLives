@@ -1,0 +1,13 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://daj88r3o8brfw"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hptm8"]
+noise_type = 2
+seed = 2137
+cellular_return_type = 6
+
+[resource]
+width = 2560
+height = 1440
+noise = SubResource("FastNoiseLite_hptm8")
+seamless = true
+seamless_blend_skirt = 0.75

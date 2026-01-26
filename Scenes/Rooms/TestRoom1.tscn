@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=4 uid="uid://bx4mxpppmwhsw"]
+[gd_scene load_steps=10 format=4 uid="uid://bx4mxpppmwhsw"]
 
-[ext_resource type="Texture2D" uid="uid://sf6o0j0efp10" path="res://TempImages/celllsproto1.png" id="1_hrvie"]
-[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://TempImages/celllsproto2.png" id="2_xouyy"]
+[ext_resource type="Texture2D" uid="uid://sf6o0j0efp10" path="res://Assets/Cells/celllsproto1.png" id="1_hrvie"]
+[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://Assets/Cells/celllsproto2.png" id="2_xouyy"]
 [ext_resource type="PackedScene" uid="uid://dja6gsrix8rgw" path="res://Entities/Enemies/enemy_base.tscn" id="3_5aa4i"]
 [ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_bjrfl"]
 [ext_resource type="TileSet" uid="uid://c4vfhrr8teana" path="res://Assets/TileSets/Floor.tres" id="3_xouyy"]
+[ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="5_xouyy"]
 
 [sub_resource type="Curve" id="Curve_5aa4i"]
 _data = [Vector2(0, 0), 0.0, 16.213484, 0, 0, Vector2(0.17117119, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4014325, 0.0, 0, 0]
@@ -105,6 +106,10 @@ position = Vector2(0, -88)
 scale = Vector2(0.5245902, 0.50178176)
 color = Color(1, 0.2, 0.33333334, 1)
 energy = 0.8
+script = ExtResource("5_xouyy")
+min_energy_mult = 0.8
+max_energy_mult = 1.1
+flicker_speed = 0.4
 
 [node name="LightBulb3" parent="Lights" instance=ExtResource("3_bjrfl")]
 position = Vector2(64, -16)

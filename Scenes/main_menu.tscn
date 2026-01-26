@@ -1,0 +1,225 @@
+[gd_scene load_steps=22 format=3 uid="uid://db4wp2tfmvvj"]
+
+[ext_resource type="Script" uid="uid://oxgf4wcqvd7h" path="res://Scripts/main_menu.gd" id="1_28flt"]
+[ext_resource type="FontFile" uid="uid://cgjdfj50u0yeo" path="res://fonts/ChakraPetch-Bold.ttf" id="2_48xlc"]
+[ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="3_ce3w2"]
+[ext_resource type="FontFile" uid="uid://7uw8n5ub4tnu" path="res://fonts/Skranji-Regular.ttf" id="3_n45e2"]
+[ext_resource type="StyleBox" uid="uid://bq1ctu1cphnto" path="res://fonts/main_menuButtons.tres" id="4_cp0ys"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="4_opfnp"]
+[ext_resource type="StyleBox" uid="uid://5y50p4bupc3k" path="res://fonts/main_menuPressed.tres" id="5_trj04"]
+[ext_resource type="StyleBox" uid="uid://b8r3l2t6kgybe" path="res://fonts/main_menuButtonHover.tres" id="5_yhxw7"]
+[ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="8_t1dhk"]
+[ext_resource type="Texture2D" uid="uid://daj88r3o8brfw" path="res://Assets/NoiseTextures/MainBGParaL3.tres" id="9_vr1f0"]
+[ext_resource type="Texture2D" uid="uid://bejmpxqp4j7al" path="res://Assets/NoiseTextures/MainBGParaL0.tres" id="10_t1dhk"]
+[ext_resource type="Texture2D" uid="uid://cilxdl0cbmhtd" path="res://Assets/NoiseTextures/MainBGParaL2.tres" id="11_5egv6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1ehe0"]
+font = ExtResource("2_48xlc")
+font_size = 128
+font_color = Color(0.92941177, 0.9019608, 0.9098039, 1)
+outline_size = 48
+outline_color = Color(0.22, 0, 0, 1)
+shadow_size = 15
+shadow_color = Color(0.15, 0, 0, 0.49019608)
+shadow_offset = Vector2(0, 15)
+stacked_shadow_count = 2
+stacked_shadow_0/offset = Vector2(0, 25)
+stacked_shadow_0/color = Color(0.15, 0, 0, 0.19607843)
+stacked_shadow_0/outline_size = 25
+stacked_shadow_1/offset = Vector2(0, 40)
+stacked_shadow_1/color = Color(0.15, 0, 0, 0.09803922)
+stacked_shadow_1/outline_size = 25
+
+[sub_resource type="Shader" id="Shader_t1dhk"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5egv6"]
+gradient = ExtResource("3_ce3w2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vtepg"]
+shader = SubResource("Shader_t1dhk")
+shader_parameter/noise_texture = ExtResource("9_vr1f0")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_5egv6")
+shader_parameter/density = 0.06000000285
+shader_parameter/speed = Vector2(-0.01, 0.02)
+
+[sub_resource type="Shader" id="Shader_vtepg"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="Gradient" id="Gradient_8dnnj"]
+offsets = PackedFloat32Array(0, 0.23214285, 1)
+colors = PackedColorArray(0.26099998, 0.29, 0, 1, 0.83, 0.74368, 0.18260002, 1, 0.54, 0.46062005, 0.01079999, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8dnnj"]
+gradient = SubResource("Gradient_8dnnj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m3bi6"]
+shader = SubResource("Shader_vtepg")
+shader_parameter/noise_texture = ExtResource("10_t1dhk")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_8dnnj")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.01, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wyh8j"]
+shader = SubResource("Shader_vtepg")
+shader_parameter/noise_texture = ExtResource("11_5egv6")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_5egv6")
+shader_parameter/density = 0.0670000031825
+shader_parameter/speed = Vector2(-0.01, 0.005)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_28flt")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.101960786, 0.019607844, 0.050980393, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Tumor Lives"
+label_settings = SubResource("LabelSettings_1ehe0")
+
+[node name="StartButton" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer/StartButton"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_n45e2")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = ExtResource("4_cp0ys")
+theme_override_styles/pressed = ExtResource("5_trj04")
+theme_override_styles/hover = ExtResource("5_yhxw7")
+text = "Start
+"
+
+[node name="ExitButton" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Exit" type="Button" parent="CenterContainer/VBoxContainer/ExitButton"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_n45e2")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = ExtResource("4_cp0ys")
+theme_override_styles/pressed = ExtResource("5_trj04")
+theme_override_styles/hover = ExtResource("5_yhxw7")
+text = "Exit"
+
+[node name="LightBulb" parent="CenterContainer" instance=ExtResource("4_opfnp")]
+position = Vector2(484, 268)
+scale = Vector2(1.4933332, 1.4066665)
+color = Color(0.4002217, 0.9840762, 0.56690633, 1)
+energy = 2.5
+script = ExtResource("8_t1dhk")
+float_amplitude = 50.0
+flicker_speed = 1.2
+
+[node name="LightBulb2" parent="CenterContainer" instance=ExtResource("4_opfnp")]
+position = Vector2(642, 461)
+scale = Vector2(1.4399998, 1.3799999)
+energy = 1.5
+script = ExtResource("8_t1dhk")
+float_speed = 1.5
+float_amplitude = 67.0
+min_energy_mult = 0.9
+max_energy_mult = 1.1
+flicker_speed = 0.4
+
+[node name="LightBulb3" parent="CenterContainer" instance=ExtResource("4_opfnp")]
+position = Vector2(798.00006, 284)
+scale = Vector2(1.5733334, 1.4442605)
+color = Color(1, 0.43962544, 0.47658575, 1)
+energy = 1.5
+script = ExtResource("8_t1dhk")
+min_energy_mult = 0.8
+max_energy_mult = 1.2
+flicker_speed = 0.7
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FogBG" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_vtepg")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.4, 0.4)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer"]
+material = SubResource("ShaderMaterial_m3bi6")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
+motion_scale = Vector2(0.8, 0.8)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer2"]
+material = SubResource("ShaderMaterial_wyh8j")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ExitButton/Exit" to="." method="_on_exit_pressed"]

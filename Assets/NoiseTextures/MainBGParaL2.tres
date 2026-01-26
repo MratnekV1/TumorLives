@@ -1,0 +1,10 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://cilxdl0cbmhtd"]
+
+[ext_resource type="FastNoiseLite" uid="uid://bnc6ojl6mm252" path="res://Shaders/NoiseNoise.tres" id="1_j3ja3"]
+
+[resource]
+width = 2560
+height = 1440
+noise = ExtResource("1_j3ja3")
+seamless = true
+seamless_blend_skirt = 0.75

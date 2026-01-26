@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sf6o0j0efp10"
-path="res://.godot/imported/celllsproto1.png-19b398ef630905b0bbcbc8b4e90127dc.ctex"
+uid="uid://dykgj3qo7kwev"
+path="res://.godot/imported/CellPlayerRunLeft.png-90f680a9395f16dda7d3f5095e08f09f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://TempImages/celllsproto1.png"
-dest_files=["res://.godot/imported/celllsproto1.png-19b398ef630905b0bbcbc8b4e90127dc.ctex"]
+source_file="res://Entities/Player/Sprites/CellPlayerRunLeft.png"
+dest_files=["res://.godot/imported/CellPlayerRunLeft.png-90f680a9395f16dda7d3f5095e08f09f.ctex"]
 
 [params]
 
