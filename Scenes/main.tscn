@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://2nkt7sbqlkp1"]
+[gd_scene load_steps=39 format=3 uid="uid://2nkt7sbqlkp1"]
 
 [ext_resource type="Script" uid="uid://bubyb7ii1jwsr" path="res://Scripts/DungeonGenerator.gd" id="1_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bl24quorgk4ub" path="res://Entities/Player/player.tscn" id="3_8gbba"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cb2m4defrakil" path="res://Scenes/Corridors/test_corridor_3.tscn" id="8_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://tkn5hb5h5kn4" path="res://Scenes/Corridors/test_corridor_4.tscn" id="9_6iyac"]
 [ext_resource type="PackedScene" uid="uid://cmppffqmp0ogc" path="res://Scenes/test_wall.tscn" id="10_6iyac"]
+[ext_resource type="PackedScene" uid="uid://byy3sh33awab5" path="res://Scenes/Corridors/test_corridor_5.tscn" id="11_hibaj"]
 [ext_resource type="Script" uid="uid://bnpxoq8munimn" path="res://Scripts/particle_manager.gd" id="13_fdnlq"]
 [ext_resource type="Texture2D" uid="uid://daj88r3o8brfw" path="res://Assets/NoiseTextures/MainBGParaL3.tres" id="14_k12tt"]
 [ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="14_wsu2k"]
@@ -19,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://dr57vk63rbfjt" path="res://Assets/NoiseTextures/MainFGParaL0.tres" id="17_fevyy"]
 [ext_resource type="Texture2D" uid="uid://d30vmp4io7poo" path="res://Assets/NoiseTextures/MainFGParaL3.tres" id="18_hibaj"]
 [ext_resource type="Texture2D" uid="uid://rmhvltrsbhe1" path="res://Assets/NoiseTextures/MainFGParaL2.tres" id="19_pdsj5"]
+[ext_resource type="PackedScene" uid="uid://cabpyncrickn4" path="res://Assets/Cells/cells_manager.tscn" id="21_pdsj5"]
 
 [sub_resource type="Shader" id="Shader_fevyy"]
 code = "shader_type canvas_item;
@@ -89,7 +91,7 @@ shader_parameter/color_ramp = SubResource("GradientTexture2D_pdsj5")
 shader_parameter/density = 0.0670000031825
 shader_parameter/speed = Vector2(-0.01, 0.005)
 
-[sub_resource type="Shader" id="Shader_gt3je"]
+[sub_resource type="Shader" id="Shader_pdsj5"]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_texture: repeat_enable, filter_nearest;
@@ -108,17 +110,17 @@ void fragment() {
 	COLOR.a *= fog * density;
 }"
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_hibaj"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ee4r6"]
 gradient = ExtResource("14_wsu2k")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k12tt"]
-shader = SubResource("Shader_gt3je")
+shader = SubResource("Shader_pdsj5")
 shader_parameter/noise_texture = ExtResource("17_fevyy")
-shader_parameter/color_ramp = SubResource("GradientTexture2D_hibaj")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_ee4r6")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(-0.01, -0.005)
 
-[sub_resource type="Shader" id="Shader_u50mg"]
+[sub_resource type="Shader" id="Shader_gt3je"]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_texture: repeat_enable, filter_nearest;
@@ -141,17 +143,17 @@ void fragment() {
 offsets = PackedFloat32Array(0, 0.23214285, 1)
 colors = PackedColorArray(0.29, 0, 0, 1, 0.83, 0.43077004, 0.18260002, 1, 0.54, 0.01079999, 0.019619865, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_cbgmd"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3pmx8"]
 gradient = SubResource("Gradient_hptm8")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hibaj"]
-shader = SubResource("Shader_u50mg")
+shader = SubResource("Shader_gt3je")
 shader_parameter/noise_texture = ExtResource("18_hibaj")
-shader_parameter/color_ramp = SubResource("GradientTexture2D_cbgmd")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_3pmx8")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(0.02, 0.01)
 
-[sub_resource type="Shader" id="Shader_ueoa1"]
+[sub_resource type="Shader" id="Shader_u50mg"]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_texture: repeat_enable, filter_nearest;
@@ -171,9 +173,9 @@ void fragment() {
 }"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fevyy"]
-shader = SubResource("Shader_ueoa1")
+shader = SubResource("Shader_u50mg")
 shader_parameter/noise_texture = ExtResource("19_pdsj5")
-shader_parameter/color_ramp = SubResource("GradientTexture2D_hibaj")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_ee4r6")
 shader_parameter/density = 0.050000002375
 shader_parameter/speed = Vector2(0.02, -0.01)
 
@@ -183,19 +185,22 @@ y_sort_enabled = true
 [node name="DungeonGenerator" type="Node2D" parent="."]
 script = ExtResource("1_jjvhh")
 room_templates = Array[PackedScene]([ExtResource("4_jjvhh"), ExtResource("4_kry3j"), ExtResource("4_344ge"), ExtResource("5_ynf5e")])
-corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac")])
+corridor_templates = Array[PackedScene]([ExtResource("5_21xkr"), ExtResource("6_6bp64"), ExtResource("8_d1ilt"), ExtResource("9_6iyac"), ExtResource("11_hibaj")])
 wall_filler_scene = ExtResource("10_6iyac")
-max_rooms = 5
-forced_starter_room = ExtResource("4_kry3j")
+max_rooms = 15
+forced_starter_room = ExtResource("11_hibaj")
 
 [node name="Player" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(0, -106)
+position = Vector2(0, -205)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101960786, 0.019607844, 0.050980393, 1)
 
 [node name="ParticleManager" type="Node2D" parent="."]
 script = ExtResource("13_fdnlq")
+
+[node name="CellsManager" parent="." instance=ExtResource("21_pdsj5")]
+spawn_chance = 0.7
 
 [node name="FogBG" type="ParallaxBackground" parent="."]
 

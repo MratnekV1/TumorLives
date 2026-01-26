@@ -22,12 +22,23 @@ signal dungeon_generated
 func _ready() -> void:
 	randomize()
 	cache_all_templates()
-	generate_dungeon()
+	await generate_dungeon()
+	
+	NavigationServer2D.map_force_update(get_world_2d().get_navigation_map())
+	await get_tree().physics_frame
 	
 	dungeon_generated.emit()
 	
 func cache_all_templates() -> void:
-	for scene in room_templates + corridor_templates:
+	var all_scenes = room_templates + corridor_templates
+	
+	if forced_starter_room:
+		room_templates.erase(forced_starter_room)
+		corridor_templates.erase(forced_starter_room)
+		if not all_scenes.has(forced_starter_room):
+			all_scenes.append(forced_starter_room)
+	
+	for scene in all_scenes:
 		if not scene: continue
 		var node = scene.instantiate()
 		var area = node.get_node_or_null("Area2D")
@@ -61,43 +72,61 @@ func generate_dungeon() -> void:
 	instantiate_first_room()
 	
 	var attempts = 0
-	var licznik = 0
-	while open_exits.size() > 0 and rooms_placed_count < max_rooms and attempts < 100:
+	var min_rooms = int(max_rooms * 0.7)
+	while open_exits.size() > 0 and rooms_placed_count < max_rooms:
 		var current_exit = open_exits.pop_front()
 		if not is_instance_valid(current_exit): continue
 		
-		# Pobieramy dane wyjścia ZANIM spróbujemy coś postawić
 		var exit_global_pos = current_exit.global_position
 		var exit_global_rot = current_exit.global_rotation_degrees
 		
 		if not _try_place_next_segment(current_exit, exit_global_pos, exit_global_rot):
-			place_wall_filler(exit_global_pos, exit_global_rot)
+			if rooms_placed_count < min_rooms:
+				if not try_place_room(corridor_templates.pick_random(), exit_global_pos, exit_global_rot, 0):
+					place_wall_filler(exit_global_pos, exit_global_rot)
+			else:
+				place_wall_filler(exit_global_pos, exit_global_rot)
 		
 		attempts += 1
 		
-		licznik+=1
-		if licznik%5==0:
-			await get_tree().process_frame
+		if attempts > max_rooms * 10: break
+		if attempts % 5 == 0: await get_tree().process_frame
+	
+	if rooms_placed_count < min_rooms:
+		print("Dungeon za mały (%d/%d). Restartuję..." % [rooms_placed_count, min_rooms])
+		_clear_dungeon()
+		generate_dungeon()
+		return
 	
 	# Zamknij resztę
 	for exit in open_exits:
 		if is_instance_valid(exit):
 			place_wall_filler(exit.global_position, exit.global_rotation_degrees)
 
+func _clear_dungeon() -> void:
+	for child in get_children():
+		child.queue_free()
+	rooms_placed_count = 0
+	open_exits.clear()
+	occupied_rects.clear()
+
 func _try_place_next_segment(exit_node: Marker2D, exit_pos: Vector2, exit_rot: float) -> bool:
 	var chain = exit_node.get_meta("corridor_chain", 0)
+	var pools_to_check = []
 	
-	# Jeśli przekroczono limit korytarzy, wymuś pokój. 
-	# W przeciwnym razie daj 50% szans na pokój najpierw, żeby uniknąć samych korytarzy.
-	var pools = []
-	if chain >= max_consecutive_corridors:
-		pools = [room_templates]
+	# Jeśli mamy bardzo mało pokoi, pozwól na więcej korytarzy, żeby "rozbić" skupisko
+	if rooms_placed_count < 5:
+		pools_to_check = [room_templates, corridor_templates]
+	elif chain >= max_consecutive_corridors:
+		pools_to_check = [room_templates]
 	else:
-		# Mieszamy kolejność, żeby nie zawsze korytarz był pierwszy
-		pools = [room_templates, corridor_templates]
-		pools.shuffle()
-	
-	for pool in pools:
+		# Standardowa szansa na kompaktowość
+		if randf() < 0.6:
+			pools_to_check = [room_templates, corridor_templates]
+		else:
+			pools_to_check = [corridor_templates, room_templates]
+
+	for pool in pools_to_check:
 		var templates = pool.duplicate()
 		templates.shuffle()
 		for scene in templates:
@@ -107,7 +136,6 @@ func _try_place_next_segment(exit_node: Marker2D, exit_pos: Vector2, exit_rot: f
 
 func try_place_room(scene: PackedScene, exit_pos: Vector2, exit_rot: float, chain: int) -> bool:
 	var data = template_data_cache[scene]
-	# Szukamy wejścia, które patrzy w stronę przeciwną do wyjścia (np. wyjście 0 -> wejście 180)
 	var target_entry_rot = wrapf(exit_rot + 180.0, 0, 360)
 	
 	for m_info in data.markers:
@@ -120,7 +148,7 @@ func try_place_room(scene: PackedScene, exit_pos: Vector2, exit_rot: float, chai
 			var new_rect = Rect2(room_global_pos + data.rect.position, data.rect.size)
 			
 			# Margines zapobiegający błędnym kolizjom na stykach
-			if not is_overlapping(new_rect.grow(-1.0)):
+			if not is_overlapping(new_rect.grow(-2.0)):
 				place_actual_room(scene, room_global_pos, m_info.pos, chain)
 				return true
 	return false
@@ -135,9 +163,13 @@ func place_actual_room(scene: PackedScene, g_pos: Vector2, used_m_pos: Vector2, 
 	var new_room = scene.instantiate()
 	add_child(new_room)
 	new_room.global_position = g_pos
-	
-	# WYMUSZENIE AKTUALIZACJI: Markery muszą znać swoją nową pozycję globalną
 	new_room.force_update_transform()
+	
+	var enemies_folder = new_room.get_node_or_null("Enemies")
+	if enemies_folder:
+		for enemy in enemies_folder.get_children():
+			if enemy.has_method("_setup_patrol_points"):
+				enemy.call_deferred("_setup_patrol_points")
 	
 	var data = template_data_cache[scene]
 	occupied_rects.append(Rect2(g_pos + data.rect.position, data.rect.size))

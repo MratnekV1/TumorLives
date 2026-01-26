@@ -1,9 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcr60f0djp5wo"]
+[gd_scene load_steps=21 format=3 uid="uid://dcr60f0djp5wo"]
 
 [ext_resource type="Script" uid="uid://bk0k466thx5n4" path="res://Scripts/death_screen.gd" id="1_dmfwj"]
 [ext_resource type="FontFile" uid="uid://7uw8n5ub4tnu" path="res://fonts/Skranji-Regular.ttf" id="1_tpvs2"]
 [ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="2_l3qio"]
 [ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="3_l3qio"]
+[ext_resource type="FontFile" uid="uid://b7ri07g7twvuc" path="res://fonts/FEASFBRG.TTF" id="3_vb6s7"]
+[ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="6_r1r1s"]
+[ext_resource type="Texture2D" uid="uid://dr57vk63rbfjt" path="res://Assets/NoiseTextures/MainFGParaL0.tres" id="7_avkmx"]
+[ext_resource type="Texture2D" uid="uid://d30vmp4io7poo" path="res://Assets/NoiseTextures/MainFGParaL3.tres" id="8_kcryb"]
+[ext_resource type="Texture2D" uid="uid://rmhvltrsbhe1" path="res://Assets/NoiseTextures/MainFGParaL2.tres" id="9_2c8yj"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2c8yj"]
 font = ExtResource("1_tpvs2")
@@ -11,6 +16,101 @@ font_size = 128
 font_color = Color(1, 0, 0, 1)
 outline_size = 50
 outline_color = Color(0.01, 0.01, 0.0069999998, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tpvs2"]
+font = ExtResource("3_vb6s7")
+font_size = 48
+font_color = Color(0.52, 0.52, 0.52, 1)
+outline_size = 50
+outline_color = Color(0.01, 0.01, 0.0069999998, 1)
+
+[sub_resource type="Shader" id="Shader_gt3je"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hibaj"]
+gradient = ExtResource("6_r1r1s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkspk"]
+shader = SubResource("Shader_gt3je")
+shader_parameter/noise_texture = ExtResource("7_avkmx")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_hibaj")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(-0.01, -0.005)
+
+[sub_resource type="Shader" id="Shader_u50mg"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="Gradient" id="Gradient_2xmse"]
+offsets = PackedFloat32Array(0, 0.23214285, 1)
+colors = PackedColorArray(0.29, 0, 0, 1, 0.83, 0.43077004, 0.18260002, 1, 0.54, 0.01079999, 0.019619865, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cbgmd"]
+gradient = SubResource("Gradient_2xmse")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_egfcw"]
+shader = SubResource("Shader_u50mg")
+shader_parameter/noise_texture = ExtResource("8_kcryb")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_cbgmd")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.02, 0.01)
+
+[sub_resource type="Shader" id="Shader_ueoa1"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_texture: repeat_enable, filter_nearest;
+uniform sampler2D color_ramp: filter_linear;
+uniform float density: hint_range(0.0, 1.0) = 0.25;
+uniform vec2 speed = vec2(0.02, 0.01);
+
+void fragment() {
+	vec2 uv = UV + speed * TIME;
+	float noise = texture(noise_texture, uv).r;
+
+	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
+	vec4 ramp_color = texture(color_ramp, vec2(noise, 0.0));
+	COLOR = ramp_color;
+
+	COLOR.a *= fog * density;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dnmne"]
+shader = SubResource("Shader_ueoa1")
+shader_parameter/noise_texture = ExtResource("9_2c8yj")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_hibaj")
+shader_parameter/density = 0.050000002375
+shader_parameter/speed = Vector2(0.02, -0.01)
 
 [node name="DeathScreen" type="Control"]
 layout_mode = 3
@@ -43,10 +143,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "YOU DIED"
 label_settings = SubResource("LabelSettings_2c8yj")
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "(Press any key to continue)"
+label_settings = SubResource("LabelSettings_tpvs2")
 
 [node name="LightBulb3" parent="." instance=ExtResource("2_l3qio")]
 position = Vector2(732, 393)
@@ -73,6 +182,14 @@ energy = 1.5
 script = ExtResource("3_l3qio")
 flicker_speed = 0.5
 
+[node name="LightBulb7" parent="." instance=ExtResource("2_l3qio")]
+position = Vector2(651, 489)
+scale = Vector2(1.6488888, 0.850906)
+color = Color(1, 0.77398044, 0.77377194, 1)
+energy = 1.5
+script = ExtResource("3_l3qio")
+flicker_speed = 0.5
+
 [node name="LightBulb5" parent="." instance=ExtResource("2_l3qio")]
 position = Vector2(929, 264)
 scale = Vector2(0.7955555, 0.8529232)
@@ -81,3 +198,33 @@ energy = 1.5
 script = ExtResource("3_l3qio")
 float_amplitude = 0.0
 flicker_speed = 0.2
+
+[node name="FogFG" type="ParallaxBackground" parent="."]
+layer = 1020
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.1, 1.1)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect" type="ColorRect" parent="FogFG/ParallaxLayer"]
+material = SubResource("ShaderMaterial_pkspk")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.3, 1.3)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect2" type="ColorRect" parent="FogFG/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_egfcw")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="FogFG"]
+motion_scale = Vector2(1.5, 1.5)
+motion_mirroring = Vector2(1280, 720)
+
+[node name="ColorRect2" type="ColorRect" parent="FogFG/ParallaxLayer2"]
+material = SubResource("ShaderMaterial_dnmne")
+offset_right = 1280.0
+offset_bottom = 720.0

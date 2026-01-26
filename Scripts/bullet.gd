@@ -8,6 +8,7 @@ var _travelled_distance = 0.0
 var shooter: Node2D
 
 @onready var raycast : RayCast2D = $RayCast2D
+@export var damage := 10
 
 func spawn(p_shooter: Node2D = null) -> void:
 	shooter = p_shooter
@@ -53,6 +54,6 @@ func _on_body_entered(body: Node2D) -> void:
 		if is_instance_valid(shooter) and shooter.has_method("spawn_hit_effect"):
 			shooter.spawn_hit_effect(global_position, hit_normal)
 		
-		body.take_damage(1, global_position)
+		body.take_damage(damage, global_position)
 	
 	deactivate()

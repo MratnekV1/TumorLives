@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="3_hixxd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0e36"]
-radius = 71.00704
+radius = 63.07139
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hixxd"]
 animations = [{
@@ -42,4 +42,14 @@ energy = 1.1
 
 [node name="Timer" type="Timer" parent="."]
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 90.0
+target_desired_distance = 50.0
+path_max_distance = 1200.0
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 80.0
+max_speed = 800.0
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_velocity_computed"]

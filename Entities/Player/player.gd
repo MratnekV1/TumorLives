@@ -47,8 +47,12 @@ const STEALTH_MIN_THRESHOLD = 1.0
 signal stealth_timeout(pos: Vector2)
 
 # Infection
+@export var infection_noise_loudness := 800.0
+@export var infection_noise_interval := 0.2
+var _noise_timer := 0.0
 var infection_particles_scene = preload("res://Assets/Particles/infection_effect.tscn")
 var active_infection_effects = {}
+
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -256,6 +260,7 @@ func _handle_infection_input(delta: float) -> void:
 		current_state = State.INFECTING
 		var areas = infection_area.get_overlapping_areas()
 		var current_targets = []
+		var is_actually_infecting = false
 		
 		for area in areas:
 			var is_done = area.get("is_fully_infected")
@@ -264,8 +269,12 @@ func _handle_infection_input(delta: float) -> void:
 			if can_be_infected and not is_done:
 				current_targets.append(area)
 				_apply_infection(area, delta)
+				is_actually_infecting = true
 			elif active_infection_effects.has(area):
 					_remove_single_effect(area)
+		
+		if is_actually_infecting:
+			_emit_infection_noise(delta)
 			
 		_remove_out_of_range_infection(current_targets)
 		_update_effect_position()
@@ -274,7 +283,15 @@ func _handle_infection_input(delta: float) -> void:
 	elif current_state == State.INFECTING:
 		_clear_infection_effects()
 		current_state = State.IDLE
-		
+		_noise_timer = 0.0
+
+func _emit_infection_noise(delta: float) -> void:
+		_noise_timer -= delta
+		if _noise_timer <= 0:
+			get_tree().call_group("Enemies", "listen_to_noise", global_position, infection_noise_loudness)
+			camera.apply_shake(1.0)
+			_noise_timer = infection_noise_interval
+
 func _apply_infection(area: Area2D, delta: float) -> void:
 		area.apply_infection(60.0 * delta)
 		

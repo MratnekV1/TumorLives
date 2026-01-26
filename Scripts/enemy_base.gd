@@ -12,7 +12,7 @@ extends CharacterBody2D
 
 @export_group("Combat")
 @export var preferred_attack_distance := 450.0
-@export var strafe_speed := 150.0
+@export var strafe_speed := 350.0
 @export var fire_rate := 10.0 
 @export var bullet_pool_size := 100
 @export var particle_pool_size := 50
@@ -24,7 +24,10 @@ extends CharacterBody2D
 @export var chase_speed := 450.0
 @export var acceleration := 2000.0
 @export var friction := 1500.0
-@export var patrol_points: Array[Marker2D]
+
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
+
+var _patrol_positions: Array[Vector2] = []
 
 # --- OUTSIDE VARIABLES ---
 var player: Node2D = null
@@ -48,15 +51,15 @@ var _shoot_timer := 0.0
 enum States {IDLE, PATROLLING, CHASING, ALERTED, ATTACKING}
 var current_state = States.PATROLLING
 var current_waypoint_idx := 0
+var _is_navigation_ready := false
 
 @onready var state_timer: Timer = $Timer
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player")
-	
 	call_deferred("_prepare_pools")
 	
-	if patrol_points.is_empty():
+	if _patrol_positions.is_empty():
 		current_state = States.IDLE
 
 func _prepare_pools() -> void:
@@ -78,9 +81,37 @@ func _prepare_pools() -> void:
 		pool_container.add_child(p)
 
 func _physics_process(delta: float) -> void:
+	if not _is_navigation_ready:
+		if NavigationServer2D.map_get_iteration_id(nav_agent.get_navigation_map()) > 0:
+			_is_navigation_ready = true
+		else:
+			return
+	
 	_update_vision_logic(delta)
 	_handle_state_machine(delta)
 	move_and_slide()
+
+func _setup_patrol_points() -> void:
+	_patrol_positions.clear()
+	var current_node = get_parent()
+	var patrol_node = null
+	
+	while current_node != null and current_node != get_tree().root:
+		patrol_node = current_node.get_node_or_null("PatrollingPoints")
+		if patrol_node: break
+		current_node = current_node.get_parent()
+	
+	if patrol_node:
+		patrol_node.force_update_transform()
+			
+		for child in patrol_node.get_children():
+			if child is Marker2D or child is Node2D:
+				_patrol_positions.append(child.global_position)
+		
+		if not _patrol_positions.is_empty():
+			current_state = States.PATROLLING
+			current_waypoint_idx = 0
+			nav_agent.target_position = _patrol_positions[0]
 
 # ---- STATE MACHINE----- #
 
@@ -101,54 +132,60 @@ func _handle_idle(delta: float) -> void:
 	_apply_friction(delta)
 
 func _handle_patrolling(delta: float) -> void:
-	if patrol_points.is_empty():
+	if _patrol_positions.is_empty():
 		current_state = States.IDLE
 		return
 	
-	var target_pos = patrol_points[current_waypoint_idx].global_position
-	var dist = global_position.distance_to(target_pos)
+	var target_pos = _patrol_positions[current_waypoint_idx]
 	
-	# Jeśli jesteśmy daleko, idź. Jeśli blisko, zacznij hamować.
-	if dist > 15.0:
-		_move_towards(target_pos, patrol_speed, delta) # Przekazujemy delta
-		_look_at_smooth(target_pos, delta)
+	if not nav_agent.is_navigation_finished():
+		_move_towards(target_pos, patrol_speed, delta)
+		_look_at_smooth(target_pos, delta, true)
 	else:
-		# Jesteśmy przy punkcie - hamujemy
 		_apply_friction(delta)
 		
-		# Jeśli prędkość spadła wystarczająco, zmień punkt
-		if velocity.length() < 10.0:
-			current_waypoint_idx = (current_waypoint_idx + 1) % patrol_points.size()
+		if velocity.length() < 20.0:
+			current_waypoint_idx = (current_waypoint_idx + 1) % _patrol_positions.size()
 			current_state = States.IDLE
 			state_timer.start(2.0)
+			
+	var dist_to_wp = global_position.distance_to(target_pos)
+	
+	if dist_to_wp > 80.0: # Margin CHANGE
+		_move_towards(target_pos, patrol_speed, delta)
+		_look_at_smooth(target_pos, delta, true)
+	else:
+		_apply_friction(delta)
+		if velocity.length() < 20.0:
+			current_waypoint_idx = (current_waypoint_idx + 1) % _patrol_positions.size()
+			current_state = States.IDLE
+			if state_timer.is_stopped():
+				state_timer.start(2.0)
 
 func _handle_chasing(delta: float) -> void:
 	if not player: return
 	
-	if _can_see_player():
-		last_known_position = player.global_position
+	var can_see = _can_see_player()
+	var nav_map = nav_agent.get_navigation_map()
+	
+	if can_see:
+		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, player.global_position)
+		last_known_position = safe_pos
 		detection_level = 1.0
 	
-	var dist = global_position.distance_to(player.global_position)
+	var dist_to_target = global_position.distance_to(last_known_position)
 	
-	if dist < 250.0 and _can_see_player():
+	if dist_to_target < 250.0 and can_see:
 		current_state = States.ATTACKING
-		# Hamuj przed atakiem
 		_apply_friction(delta)
 		return
 	
-	if not _can_see_player():
-		# Idź do ostatniej znanej pozycji
-		_move_towards(last_known_position, chase_speed, delta)
-		_look_at_smooth(last_known_position, delta)
-		
-		if global_position.distance_to(last_known_position) < 30.0:
-			current_state = States.ALERTED
-			state_timer.start(3.0)
-	else:
-		# Goń gracza
-		_move_towards(player.global_position, chase_speed, delta)
-		_look_at_smooth(player.global_position, delta)
+	_move_towards(last_known_position, chase_speed, delta)
+	_look_at_smooth(last_known_position, delta, false)
+	
+	if not can_see and nav_agent.is_navigation_finished():
+		current_state = States.ALERTED
+		state_timer.start(3.0)
 
 func _handle_alerted(delta: float) -> void:
 	_apply_friction(delta)
@@ -170,21 +207,17 @@ func _handle_attacking(delta: float) -> void:
 	var dist_to_player = global_position.distance_to(player.global_position)
 	var dir_to_player = global_position.direction_to(player.global_position)
 	
-	var move_vec = Vector2.ZERO
-	
-	if dist_to_player > preferred_attack_distance + 50.0:
-		move_vec += dir_to_player
-	elif dist_to_player < preferred_attack_distance - 50.0:
-		move_vec -= dir_to_player
-	
 	var strafe_dir = Vector2(dir_to_player.y, -dir_to_player.x)
-	var side_movement = sin(Time.get_ticks_msec() * 0.002) 
-	move_vec += strafe_dir * side_movement
+	var side_movement = sin(Time.get_ticks_msec() * 0.002) * 200.0
 	
-	if move_vec != Vector2.ZERO:
-		velocity = velocity.move_toward(move_vec.normalized() * chase_speed * 0.8, acceleration * delta)
-	else:
-		_apply_friction(delta)
+	var target_point = player.global_position
+	
+	if dist_to_player < preferred_attack_distance:
+		target_point = global_position - (dir_to_player * 100.0)
+
+	target_point += strafe_dir * side_movement
+	
+	_move_towards(target_point, chase_speed * 0.8, delta)
 
 	if dist_to_player > detection_radius or not _can_see_player():
 		current_state = States.CHASING
@@ -230,26 +263,50 @@ func listen_to_noise(noise_pos: Vector2, loudness: float):
 		
 		if current_state == States.IDLE or current_state == States.PATROLLING:
 			current_state = States.ALERTED
-			# Słuch podbija wykrycie tylko do połowy, żeby nie triggerować od razu ataku
 			detection_level = max(detection_level, 0.5)
 			if state_timer.is_stopped():
 				state_timer.start(3.0)
 
 # ---- HELPERS --- #
 
-# NOWOŚĆ: Funkcja z fizyką przyspieszenia
 func _move_towards(target: Vector2, spd: float, delta: float):
-	var direction = global_position.direction_to(target)
-	# move_toward na wektorze prędkości daje nam acceleration
-	velocity = velocity.move_toward(direction * spd, acceleration * delta)
+	if nav_agent.target_position.distance_to(target) > 20.0:
+		nav_agent.target_position = target
+		
+		if nav_agent.is_target_reachable() == false:
+			current_state = States.ALERTED
+			state_timer.start(2.0)
+			return
+	
+	if nav_agent.is_navigation_finished():
+		return
 
-# NOWOŚĆ: Funkcja hamowania
+	var next_path_pos = nav_agent.get_next_path_position()
+	var direction = global_position.direction_to(next_path_pos)
+	
+	var desired_velocity = direction * spd
+	
+	if nav_agent.avoidance_enabled:
+		nav_agent.set_velocity(desired_velocity)
+	else:
+		velocity = velocity.move_toward(desired_velocity, acceleration * delta)
+
+func _on_velocity_computed(safe_velocity: Vector2):
+	velocity = velocity.move_toward(safe_velocity, acceleration * get_physics_process_delta_time())
+
 func _apply_friction(delta: float):
 	velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
-func _look_at_smooth(pos: Vector2, delta: float):
-	var target_angle = (pos - global_position).angle()
-	rotation = lerp_angle(rotation, target_angle, 10.0 * delta)
+func _look_at_smooth(target_pos: Vector2, delta: float, look_at_path: bool = false):
+	var target_angle: float
+	
+	if look_at_path:
+		var next_point = nav_agent.get_next_path_position()
+		target_angle = (next_point - global_position).angle()
+	else:
+		target_angle = (target_pos - global_position).angle()
+	
+	rotation = lerp_angle(rotation, target_angle, 20.0 * delta)
 
 func _can_see_player() -> bool:
 	if not player: return false

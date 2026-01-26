@@ -1,7 +1,7 @@
 extends Control
 
 @onready var overlay: ColorRect = $DeathOverlay
-@onready var label: Label = $CenterContainer/Label
+@onready var label: Label = $CenterContainer/VBoxContainer/Label
 
 var can_skip: bool = false
 

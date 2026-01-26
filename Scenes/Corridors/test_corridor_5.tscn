@@ -1,0 +1,113 @@
+[gd_scene load_steps=9 format=4 uid="uid://byy3sh33awab5"]
+
+[ext_resource type="Texture2D" uid="uid://sf6o0j0efp10" path="res://Assets/Cells/celllsproto1.png" id="1_m5x2k"]
+[ext_resource type="Texture2D" uid="uid://tboo1un3lqde" path="res://Assets/Cells/celllsproto2.png" id="2_00ce4"]
+[ext_resource type="TileSet" uid="uid://c4vfhrr8teana" path="res://Assets/TileSets/Floor.tres" id="3_mlobk"]
+[ext_resource type="PackedScene" uid="uid://c6t1tjxjcgxb3" path="res://Assets/Lights/light_bulb.tscn" id="4_tllyw"]
+[ext_resource type="Script" uid="uid://bcpvtu5hcwhc6" path="res://Scripts/light_bulb.gd" id="5_wj5od"]
+
+[sub_resource type="Curve" id="Curve_yfgtv"]
+_data = [Vector2(0, 0), 0.0, 16.213484, 0, 0, Vector2(0.17117119, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4014325, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_c216q"]
+offsets = PackedFloat32Array(0, 0.10204082, 0.84183675, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.7079665, 0.7079665, 0.7079664, 1, 0.52906674, 0.5290667, 0.5290667, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ooio3"]
+size = Vector2(768, 768)
+
+[node name="TestRoom2" type="Node2D"]
+
+[node name="Particles" type="Node2D" parent="."]
+scale = Vector2(8.18, 8.18)
+
+[node name="RED_BG_PARTICLES" type="CPUParticles2D" parent="Particles"]
+z_index = -1020
+position = Vector2(32, -40)
+rotation = 2.3561945
+texture = ExtResource("1_m5x2k")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(256, 256)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_yfgtv")
+color_ramp = SubResource("Gradient_c216q")
+anim_offset_max = 1.0
+
+[node name="GREEN_BG_PARTICLES2" type="CPUParticles2D" parent="Particles"]
+z_index = -1020
+position = Vector2(32, -40)
+rotation = -1.5707964
+texture = ExtResource("2_00ce4")
+lifetime = 30.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(256, 256)
+direction = Vector2(0, 0)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+orbit_velocity_max = 0.01
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_min = 0.01
+scale_amount_max = 0.06
+scale_amount_curve = SubResource("Curve_yfgtv")
+color_ramp = SubResource("Gradient_c216q")
+anim_offset_max = 1.0
+
+[node name="Ground" type="TileMapLayer" parent="."]
+z_index = -99
+tile_map_data = PackedByteArray("AAD/////BAAIAAUAAAD//wAABAAIAAQAAAAAAP//BAAHAAUAAAABAP//BAABAAAAAAABAAAABAABAAIAAAAAAAEABAACAAEAAAD//wEABAAAAAEAAAD+////BAABAAAAAAD+/wAABAABAAIAAAD//wIABAAAAAIAAAAAAAIABAACAAIAAAACAP//BAACAAAAAAACAAAABAACAAIAAAD9////BAAAAAAAAAD9/wAABAAAAAIAAAD///7/BAAAAAEAAAAAAP7/BAACAAEAAAD9/wEABAADAAAAAAD+/wEABAAHAAEAAAD+/wIABAADAAQAAAABAAIABAADAAQAAAABAAEABAAGAAEAAAACAAEABAAFAAAAAAACAP7/BAAFAAAAAAABAP7/BAAGAAIAAAABAP3/BAADAAIAAAD+//3/BAADAAIAAAD+//7/BAAHAAIAAAD9//7/BAADAAAAAAD///3/BAAAAAAAAAAAAP3/BAACAAAAAAAAAAAABAAHAAQAAAA=")
+tile_set = ExtResource("3_mlobk")
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_ooio3")
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="Exit1" type="Marker2D" parent="Markers"]
+position = Vector2(-396, 0)
+rotation = 3.1415927
+
+[node name="Exit2" type="Marker2D" parent="Markers"]
+position = Vector2(396, 0)
+
+[node name="Exit3" type="Marker2D" parent="Markers"]
+position = Vector2(0, 396)
+rotation = 1.5707964
+
+[node name="Exit4" type="Marker2D" parent="Markers"]
+position = Vector2(0, -384)
+rotation = 4.712389
+
+[node name="Lights" type="Node2D" parent="."]
+scale = Vector2(8.18, 8.18)
+
+[node name="LightBulb" parent="Lights" instance=ExtResource("4_tllyw")]
+position = Vector2(1.4669925, -1.4669952)
+scale = Vector2(0.29991847, 0.2868784)
+color = Color(1, 0.2, 0.33333334, 1)
+energy = 0.9
+script = ExtResource("5_wj5od")
+min_energy_mult = 0.8
+flicker_speed = 0.5

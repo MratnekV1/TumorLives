@@ -17,11 +17,13 @@ var base_energy: float
 var base_y_pos: float
 var time_passed: float = 0.0
 var flicker_timer: float = 0.0
+var phase_offset: float = 0.0
 
 func _ready() -> void:
 	randomize()
 	base_energy = energy
 	base_y_pos = position.y
+	phase_offset = randf()
 
 func _process(delta: float) -> void:
 	time_passed += delta
@@ -33,7 +35,7 @@ func _process(delta: float) -> void:
 		_handle_flicker(delta)
 
 func _handle_bobbing() -> void:
-	position.y = base_y_pos + sin(time_passed * float_speed) * float_amplitude
+	position.y = base_y_pos + sin((time_passed * float_speed) + phase_offset) * float_amplitude
 
 func _handle_flicker(delta: float) -> void:
 	flicker_timer -= delta

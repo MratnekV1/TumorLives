@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://db4wp2tfmvvj"]
 
 [ext_resource type="Script" uid="uid://oxgf4wcqvd7h" path="res://Scripts/main_menu.gd" id="1_28flt"]
-[ext_resource type="FontFile" uid="uid://cgjdfj50u0yeo" path="res://fonts/ChakraPetch-Bold.ttf" id="2_48xlc"]
+[ext_resource type="FontFile" uid="uid://y0ovmakmr65" path="res://fonts/Acinonyx Jubatus Personal Use Only.ttf" id="2_t1dhk"]
 [ext_resource type="Gradient" uid="uid://csi7103pfbt3l" path="res://Shaders/NoiseColorRamp.tres" id="3_ce3w2"]
 [ext_resource type="FontFile" uid="uid://7uw8n5ub4tnu" path="res://fonts/Skranji-Regular.ttf" id="3_n45e2"]
 [ext_resource type="StyleBox" uid="uid://bq1ctu1cphnto" path="res://fonts/main_menuButtons.tres" id="4_cp0ys"]
@@ -14,8 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://cilxdl0cbmhtd" path="res://Assets/NoiseTextures/MainBGParaL2.tres" id="11_5egv6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1ehe0"]
-font = ExtResource("2_48xlc")
-font_size = 128
+font = ExtResource("2_t1dhk")
+font_size = 200
 font_color = Color(0.92941177, 0.9019608, 0.9098039, 1)
 outline_size = 48
 outline_color = Color(0.22, 0, 0, 1)
@@ -166,8 +166,10 @@ scale = Vector2(1.4933332, 1.4066665)
 color = Color(0.4002217, 0.9840762, 0.56690633, 1)
 energy = 2.5
 script = ExtResource("8_t1dhk")
-float_amplitude = 50.0
-flicker_speed = 1.2
+float_amplitude = 5.0
+min_energy_mult = 0.8
+max_energy_mult = 0.9
+flicker_speed = 1.5
 
 [node name="LightBulb2" parent="CenterContainer" instance=ExtResource("4_opfnp")]
 position = Vector2(642, 461)
@@ -180,10 +182,21 @@ min_energy_mult = 0.9
 max_energy_mult = 1.1
 flicker_speed = 0.4
 
+[node name="LightBulb4" parent="CenterContainer" instance=ExtResource("4_opfnp")]
+position = Vector2(680, 239)
+scale = Vector2(0.8933335, 0.8561113)
+energy = 1.2
+script = ExtResource("8_t1dhk")
+float_speed = 1.5
+float_amplitude = 5.0
+min_energy_mult = 0.9
+max_energy_mult = 1.1
+flicker_speed = 0.4
+
 [node name="LightBulb3" parent="CenterContainer" instance=ExtResource("4_opfnp")]
-position = Vector2(798.00006, 284)
+position = Vector2(908.00006, 213.99998)
 scale = Vector2(1.5733334, 1.4442605)
-color = Color(1, 0.43962544, 0.47658575, 1)
+color = Color(0.75, 0.255, 0.28799996, 1)
 energy = 1.5
 script = ExtResource("8_t1dhk")
 min_energy_mult = 0.8
@@ -197,11 +210,13 @@ flicker_speed = 0.7
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
 motion_scale = Vector2(0.1, 0.1)
 motion_mirroring = Vector2(1280, 720)
+metadata/_edit_lock_ = true
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/FogBG/ParallaxLayer3"]
 material = SubResource("ShaderMaterial_vtepg")
 offset_right = 1280.0
 offset_bottom = 720.0
+metadata/_edit_lock_ = true
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
 motion_scale = Vector2(0.4, 0.4)
@@ -211,6 +226,7 @@ motion_mirroring = Vector2(1280, 720)
 material = SubResource("ShaderMaterial_m3bi6")
 offset_right = 1280.0
 offset_bottom = 720.0
+metadata/_edit_lock_ = true
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="CanvasLayer/FogBG"]
 motion_scale = Vector2(0.8, 0.8)
@@ -220,6 +236,7 @@ motion_mirroring = Vector2(1280, 720)
 material = SubResource("ShaderMaterial_wyh8j")
 offset_right = 1280.0
 offset_bottom = 720.0
+metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ExitButton/Exit" to="." method="_on_exit_pressed"]

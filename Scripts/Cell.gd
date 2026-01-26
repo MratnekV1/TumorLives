@@ -9,6 +9,8 @@ var is_fully_infected := false
 
 var fear_tween: Tween
 
+signal cell_infected
+
 func _ready():
 	scared_area.area_entered.connect(_on_scared_area_entered)
 	scared_area.area_exited.connect(_on_scared_area_exited)
@@ -30,6 +32,7 @@ func apply_infection(amount: float):
 
 func _on_fully_infected():
 	is_fully_infected = true
+	cell_infected.emit()
 	_stop_fear_tween()
 	
 	var final_tween = create_tween().set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
